@@ -1,0 +1,68 @@
+# depslib dependency file v1.0
+1679123249 source:d:\c++\thuram\baseobject.cpp
+	"BaseObject.h"
+
+1679123235 d:\c++\thuram\baseobject.h
+	"CommonFunc.h"
+
+1679728272 d:\c++\thuram\commonfunc.h
+	<SDL_image.h>
+	<SDL.h>
+	<iostream>
+	<unistd.h>
+	<vector>
+	<ostream>
+	<cstdlib>
+	<ctime>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1679117669 source:d:\c++\thuram\commonfunc.cpp
+	"CommonFunc.h"
+
+1679927662 source:d:\c++\thuram\mainobject.cpp
+	"MainObject.h"
+
+1679417209 d:\c++\thuram\mainobject.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"BulletObject.h"
+
+1679930272 source:d:\c++\thuram\main.cpp
+	"CommonFunc.h"
+	"BaseObject.h"
+	"MainObject.h"
+	"Map.h"
+	"ThreatObject.h"
+
+1679185212 source:d:\c++\thuram\map.cpp
+	"Map.h"
+
+1679184619 d:\c++\thuram\map.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1679930272 source:d:\c++\thuram\bulletobject.cpp
+	"BulletObject.h"
+
+1679931428 d:\c++\thuram\bulletobject.h
+	"BaseObject.h"
+	"Map.h"
+
+1679929152 source:d:\c++\thuram\threatobject.cpp
+	"ThreatObject.h"
+
+1679733833 d:\c++\thuram\threatobject.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"MainObject.h"
+	"BulletObject.h"
+
+1679731927 d:\c++\thuram\bulletthreat.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"Map.h"
+
+1679731916 source:d:\c++\thuram\bulletthreat.cpp
+	"BulletThreat.h"
+
