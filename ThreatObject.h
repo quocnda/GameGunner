@@ -74,7 +74,7 @@ class ThreatObject : public BaseObject
 
         bool is_alive_;
 
-
+        int bi_ban;
         std::vector<Bullet*> p_amo_list;
 };
 

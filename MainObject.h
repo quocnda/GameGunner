@@ -49,15 +49,22 @@ private:
      int Main_height;
 
      Input input_type;
-     int frame_;
-     int frame_1;
+     int frame_;//left
+     int frame_1;//right
+     int frame_0;//dungyen
+     int frame_bantrai;
+     int frame_banphai;
      int status_;
 
+     bool da_ban;
      bool is_alive;
     int Dir;
 
-     SDL_Rect clip_right[5];
-     SDL_Rect clip_left[5];
+     SDL_Rect clip_right[6];
+     SDL_Rect clip_left[6];
+     SDL_Rect clip_dungyen[6];
+     SDL_Rect clip_bandanphai[6];
+     SDL_Rect clip_bandantrai[6];
 
      int toc_do;
 

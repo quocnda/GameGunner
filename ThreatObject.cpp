@@ -18,7 +18,7 @@ ThreatObject::ThreatObject()
     status_=0;
     Dir=(rand()%4)+1;
     is_alive_=true;
-
+    bi_ban=3;
 }
 
 ThreatObject::~ThreatObject()
@@ -230,11 +230,12 @@ bool ThreatObject::CheckToBullet(MainObject& p)
     std::vector<Bullet*> bullet = p.Getamo();
     SDL_Rect mainRect = this->rect_;
     mainRect.w=mainRect.w/5-10;
-    mainRect.h=mainRect.h-32;
+
+    mainRect.h=mainRect.h-2;
     SDL_Rect subRect = p.GetRect();
-    subRect.w=subRect.w/5;
+    subRect.w=subRect.w/6;
     subRect.x+=4;
-    subRect.h=subRect.h-32;
+    subRect.h=subRect.h/5;
     subRect.y=subRect.y+5;
     if(checkCollision(mainRect, subRect))  {
             std::cout<<mainRect.x<<" "<<mainRect.y<<" "<<mainRect.w<<" "<<mainRect.h<<'\n';
@@ -244,12 +245,21 @@ bool ThreatObject::CheckToBullet(MainObject& p)
         SDL_Rect tmpRect = bullet[i]->GetRect();
         if(checkCollision(mainRect, tmpRect)){
                 is_ban=true;
-            is_alive_ = false;
-            //score += 10;
-           // std::cout << score << std::endl;
+                if(bullet[i]->get_type()==2)
+                {
+                    bi_ban-=3;
+                }
+                else {
+                    bi_ban--;
+                }
+
             bullet.erase(bullet.begin() + i);
             p.Setamolist(bullet);
         }
+    }
+    if(bi_ban<=0)
+    {
+       is_alive_=false;
     }
     return is_ban;
 }

@@ -36,52 +36,47 @@ int main(int argc,char* args[])
         {
 
 
-            main_obj.LoadImg("main_ob.png",gScreen);
+            main_obj.LoadImg("naruto1.png",gScreen);
             main_obj.SetClip();
             main_obj.settocdo(2);
              std::vector<ThreatObject*> p_threat;
-             std::vector<Bullet*> p_bullet_threat;
+
              for(int i=0;i<NUM_THREAT;i++) {
                 ThreatObject* p_threat_=new ThreatObject();
-                Bullet* p_bullet=new Bullet();
+
                 p_threat_->LoadImg("Threat1.png",gScreen);
-                p_bullet->LoadImg("sphere.png",gScreen);
+
                 p_threat_->SetClip();
                 p_threat.push_back(p_threat_);
-                p_bullet_threat.push_back(p_bullet);
+
                 p_threat_=NULL;
              }
              for(int i=0;i<5;i++) {
                 p_threat[i]->set_x_pos(1664);
-                p_threat[i]->set_y_pos(768);
+                p_threat[i]->set_y_pos(832);
                /* Bullet* p_amo=new Bullet();
                  p_threat[i]->InitBullet(p_amo,gScreen);
              */
              }
              for(int i=5;i<10;i++) {
-                p_threat[i]->set_x_pos(1152);
-                p_threat[i]->set_y_pos(384);
+                p_threat[i]->set_x_pos(768);
+                p_threat[i]->set_y_pos(1344);
                 /*Bullet* p_amo=new Bullet();
                 p_threat[i]->InitBullet(p_amo,gScreen);
              */
              }
              for(int i=10;i<15;i++) {
-                p_threat[i]->set_x_pos(896);
-                p_threat[i]->set_y_pos(1280);
+                p_threat[i]->set_x_pos(1216);
+                p_threat[i]->set_y_pos(448);
                 /*Bullet* p_amo=new Bullet();
                 p_threat[i]->InitBullet(p_amo,gScreen);*/
              }
-             for(int i=15;i<25;i++) {
 
-                Bullet* p_amo=new Bullet();
-                p_threat[i]->InitBullet(p_amo,gScreen);
-                int x=p_threat[i]->toa_do_x();
-                int y=p_threat[i]->toa_do_y();
-                p_bullet_threat[i]->set_pos(x,y);
-                p_bullet_threat[i]->set_val_bullet(5);
-             }
             game_map.LoadMap("map.txt");
             game_map.LoadTiles(gScreen);
+           Map mapX=game_map.getMap();
+            std::cout<<mapX.max_x_<<" "<<mapX.max_y_<<'\n';
+            //game_map.xuatMap();
             bool quit=false;
             bool is_win=false;
             while(!quit&&!is_win)
@@ -116,15 +111,14 @@ int main(int argc,char* args[])
 
                  main_obj.HandleBullet(gScreen,map_data);
 
-                  p_threat[20]->SetMapXY(map_data.start_x_,map_data.start_y_);
+                 /* p_threat[20]->SetMapXY(map_data.start_x_,map_data.start_y_);
                     p_threat[20]->DoPlayer(map_data);
                     //p_threat[20]->MakeBullet(gScreen,SCREEN_WIDTH,SCREEN_HEIGHT);
                     p_threat[20]->Show(gScreen);
+                  bool check=p_threat[20]->CheckToBullet(main_obj);
 
-
-                    bool check=p_threat[20]->CheckToBullet(main_obj);
-
-                /*for(int i=0;i<p_threat.size();i++) {
+                  */
+                for(int i=0;i<p_threat.size();i++) {
                     p_threat[i]->SetMapXY(map_data.start_x_,map_data.start_y_);
                     p_threat[i]->DoPlayer(map_data);
                     p_threat[i]->Show(gScreen);
@@ -133,13 +127,11 @@ int main(int argc,char* args[])
                             std::cout<<p_threat.size()<<'\n';
                         num_threat--;
                     }
-                    p_threat[i]->MakeBullet(gScreen,map_data);
-                    }*/
-                    if(num_threat==0) {
+                }
+                 if(num_threat<=0&&p_threat.size()==0) {
                             std::cout<<"ban da thang";
-                        //is_win=true;
                     }
-                  //if(!main_obj.get_a_live()) {std::cout<<"ban da thua";}//quit=true;}
+
 
         for(int i = 0; i < p_threat.size(); i++){
             if(!p_threat[i]->is_alive()){
@@ -151,7 +143,7 @@ int main(int argc,char* args[])
 
 
 
-                 SDL_Delay(10);
+                 SDL_Delay(5);
                   SDL_RenderPresent(gScreen);
 
 

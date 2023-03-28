@@ -6,7 +6,8 @@
 #include "BaseObject.h"
 
 
-#define MAX_TILES 3
+#define MAX_TILES 5
+
 class TileMap : public BaseObject
 {
 public:
@@ -27,6 +28,7 @@ public:
     {
         return game_map_;
     };
+    void xuatMap();
     void SetMap(Map& map_data) {game_map_=map_data;};
 
 private:

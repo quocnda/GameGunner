@@ -7,10 +7,12 @@
 #include "BaseObject.h"
 #include "Map.h"
 
-#define WIDTHLASER 35
-#define HEIGHTLASER 5
-#define WIDTHSPHERE 10
-#define HEIGHTSPHERE 10
+#define WIDTHLASER 20
+
+#define HEIGHTLASER 20
+
+#define WIDTHSPHERE 35
+#define HEIGHTSPHERE 35
 #define FRAME 6
 
 
@@ -39,11 +41,14 @@ public:
     void SetDir(int x) {Dir=x;}
     int  GetDir() {return Dir;}
 
+    void SetMapXY(int x,int y) {map_x=x;map_y=y;}
+    void Checktomap(Map& map_data);
+    void Show1(SDL_Renderer* screen);
 
+    void HandleMove(const int& x_border, const int& y_border, Map& map_data);
     void set_pos(int x,int y) {x_pos=x;y_pos=y;}
     void Show(SDL_Renderer* des, int x, int y);
-    void HandleMove(const int& x_border, const int& y_border, Map& map_data);
-    void HandleMove1(const int& x_border,const int& y_border);
+
 private:
     int x_val;
     int y_val;
@@ -54,7 +59,8 @@ private:
     bool is_move_;
     int amo_type_;
 
-
+    int map_x;
+    int map_y;
 
     bool is_daban;
     int Dir;

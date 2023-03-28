@@ -4,15 +4,19 @@
 MainObject::MainObject() {
     frame_1=0;
  frame_=0;
+frame_0=0;
+frame_banphai=0;
+frame_banphai=0;
+da_ban=false;
 
   Dir=4;
  x_pos_=0;
- y_pos_=0;
+ y_pos_=128;
  y_val_=0;
  x_val_=0;
  Main_width=0;
  Main_height=0;
- status_=4;
+ status_=0;
  input_type.left=0;
  input_type.right=0;
  input_type.down=0;
@@ -31,43 +35,78 @@ bool MainObject::LoadImg(std::string path,SDL_Renderer* screen)
 {
     bool ret=BaseObject::LoadImg(path,screen);
     if(ret) {
-         Main_width=rect_.w/5;
-         Main_height=rect_.h/2;
+         Main_width=rect_.w/6;
+         Main_height=rect_.h/5;
     }
     //std::cout<<Main_width<<" "<<Main_height<<'\n';
     return ret;
 }
 void MainObject::Show(SDL_Renderer* screen)
 {
-     if(input_type.right==1||input_type.up==1||input_type.down==1||input_type.left==1)
+    if(status_==0&&da_ban)
+    {
+        if(Dir==3) {
+            frame_bantrai++;
+        }
+        else if (Dir==4) {
+            frame_banphai++;
+        }
+    }
+    else {
+    if(input_type.right==1||input_type.up==1||input_type.down==1||input_type.left==1)
      {
        if(status_==3) {
-        frame_++;
+            frame_++;
        }
        else if(status_==4) {
-        frame_1++;
+                  frame_1++;
        }
+     else  if(status_==0)
+    {
+        frame_0++;
+    }
        else {
         frame_1++;
         frame_++;
        }
-       if(frame_1>=5) {frame_1=0;}
-       if(frame_>=5) {frame_=0;}
-     }
+       if(frame_1>=6) {frame_1=0;}
+       if(frame_>=6) {frame_=0;}
 
+     }
+    }
+    if(frame_banphai>=7) {frame_banphai=0;da_ban=false;}
+       if(frame_bantrai>=7) {frame_bantrai=0;da_ban=false;}
     rect_.x=x_pos_-map_x;
 	rect_.y = y_pos_-map_y;
-
     SDL_Rect *current_clip=NULL;
-    if(Dir==4) {
-        if(status_==4||status_==2||status_==1)  {
-        current_clip=&clip_right[frame_1];
+    if(status_==0&&!da_ban)
+    {
+        current_clip=&clip_dungyen[frame_0];
+    }
+    else
+    {
+        if(status_==0&&da_ban)
+        {
+            if(Dir==4) {
+                current_clip=&clip_bandanphai[frame_banphai];
+            }
+            else if (Dir==3) {
+                current_clip=&clip_bandantrai[frame_bantrai];
+            }
+
         }
+        else {
+          if(Dir==4) {
+        if(status_==4||status_==2||status_==1)  {
+                current_clip=&clip_right[frame_1];
+         }
     }
     else if (Dir==3) {
              if(status_==3||status_==1||status_==2) {
-           current_clip=&clip_left[frame_];
-         }
+             current_clip=&clip_left[frame_];
+            }
+          }
+        }
     }
 
 
@@ -93,16 +132,17 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
     {
          switch( e.key.keysym.sym )
         {
-           case SDLK_w: status_=1;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0; break;
-            case SDLK_s: status_=2;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0; break;
-            case SDLK_a: status_=3;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=3; break;
-            case SDLK_d: status_=4;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=4; break;
+           case SDLK_w: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0; break;
+            case SDLK_s: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0; break;
+            case SDLK_a: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=3; break;
+            case SDLK_d: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=4; break;
 
             //case SDLK_e: bomb.SetBomno(false);dat_bom=false;break;
         }
     }
     else if (e.type==SDL_MOUSEBUTTONDOWN)
      {
+         da_ban=true;
          Bullet* p_amo=new Bullet();
          if(e.button.button==SDL_BUTTON_LEFT)
          {
@@ -115,21 +155,34 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
          else if (e.button.button==SDL_BUTTON_RIGHT)
          {
              p_amo->setwh(WIDTHSPHERE,HEIGHTSPHERE);
-             p_amo->LoadImg("sphere.png",screen);
+            bool check= p_amo->LoadImg("sphere.png",screen);
+             if(!check)
+             {
+                 std::cout<<"loi load dan";
+             }
              p_amo->set_type(Bullet::SPHERE);
              p_amo->SetDir(Dir);
+             //p_amo->set_val_bullet(1);
          }
         // p_amo->SetRect(this->rect_.x+this->rect_.w/5-5,this->rect_.y+this->rect_.h*0.25);
 
-            p_amo->set_pos(x_pos_, y_pos_+this->rect_.h*0.25);
-
-
-
-         if(p_amo->GetDir()==3) {
-            p_amo->set_val_bullet(-10);
-         }
+            p_amo->set_pos(x_pos_, y_pos_);
+         if(p_amo->get_type()==2) {
+             if(p_amo->GetDir()==3) {
+            p_amo->set_val_bullet(-2);
+             }
          else {
+            p_amo->set_val_bullet(2);
+           }
+         }
+         else
+         {
+              if(p_amo->GetDir()==3) {
+            p_amo->set_val_bullet(-10);
+           }
+           else {
             p_amo->set_val_bullet(10);
+         }
          }
          p_amo->set_is_move(true);
          p_amo_list.push_back(p_amo);
@@ -137,19 +190,39 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
 }
 void MainObject::SetClip()
 {
-    for(int i=0;i<=4;i++) {
+    for(int i=0;i<=5;i++) {
+        clip_dungyen[i].x=i*Main_width;
+        clip_dungyen[i].y=0;
+        clip_dungyen[i].w=Main_width;
+        clip_dungyen[i].h=Main_height;
+    }
+    for(int j=0;j<=5;j++) {
+        clip_bandantrai[j].x=j*Main_width;
+        clip_bandantrai[j].y=Main_height;
+        clip_bandantrai[j].w=Main_width;
+        clip_bandantrai[j].h=Main_height;
+    }
+    for(int i=0;i<=5;i++)
+    {
+        clip_bandanphai[i].x=i*Main_width;
+        clip_bandanphai[i].y=2*Main_height;
+        clip_bandanphai[i].w=Main_width;
+        clip_bandanphai[i].h=Main_height;
+    }
+    for(int i=0;i<=5;i++)
+    {
+        clip_left[i].x=i*Main_width;
+        clip_left[i].y=3*Main_height;
+        clip_left[i].w=Main_width;
+        clip_left[i].h=Main_height;
+    }
+    for(int i=0;i<=5;i++)
+    {
         clip_right[i].x=i*Main_width;
-        clip_right[i].y=0;
+        clip_right[i].y=4*Main_height;
         clip_right[i].w=Main_width;
         clip_right[i].h=Main_height;
     }
-    for(int j=0;j<=4;j++) {
-        clip_left[j].x=j*Main_width;
-        clip_left[j].y=Main_height;
-        clip_left[j].w=Main_width;
-        clip_left[j].h=Main_height;
-    }
-
 
 }
 
@@ -199,6 +272,19 @@ void MainObject::checktomap(Map & map_data) {
 
     if(x1>=0&&x2<MAP_X&&y1>=0&&y2<MAP_Y)
     {
+        int val1=map_data.tile[y1][x2];
+        int val2=map_data.tile[y2][x2];
+        if(val1==2||val2==2)
+        {
+            map_data.tile[y1][x2]=1;
+            map_data.tile[y2][x2]=1;
+        }
+
+          if(val1==3||val2==3)
+        {
+            map_data.tile[y1][x2]=1;
+            map_data.tile[y2][x2]=1;
+        }
         if(x_val_>0) {
             if(map_data.tile[y1][x2]!=1||map_data.tile[y2][x2]!=1) {
                 x_pos_=x2*TILE_SIZE;
@@ -207,7 +293,17 @@ void MainObject::checktomap(Map & map_data) {
             }
 
         }
-        else if(x_val_<0) {
+        val1=map_data.tile[y1][x1];
+        val2=map_data.tile[y2][x1];
+        if(val1==2||val2==2) {
+            map_data.tile[y1][x1]=1;
+            map_data.tile[y2][x1]=1;
+        }
+        if(val1==3||val2==3) {
+            map_data.tile[y1][x1]=1;
+            map_data.tile[y2][x1]=1;
+        }
+        if(x_val_<0) {
             if(map_data.tile[y1][x1]!=1||map_data.tile[y2][x1]!=1) {
                 x_pos_=(x1+1)*TILE_SIZE;
                 x_val_=0;
@@ -225,14 +321,37 @@ void MainObject::checktomap(Map & map_data) {
 
     if(x1>=0&&x2<MAP_X&&y1>=0&&y2<MAP_Y)
     {
+        int val_1=map_data.tile[y2][x1];
+        int val_2=map_data.tile[y2][x2];
         if(y_val_>0) {
+                if(val_1==2||val_2==2)
+            {
+            map_data.tile[y2][x1]=1;
+            map_data.tile[y2][x2]=1;
+           }
+           if(val_1==3||val_2==3) {
+            map_data.tile[y2][x1]=1;
+            map_data.tile[y2][x2]=1;
+           }
             if(map_data.tile[y2][x1]!=1||map_data.tile[y2][x2]!=1) {
                 y_pos_=y2*TILE_SIZE;
                 y_pos_-=(Main_height+1);
                 y_val_=0;
             }
         }
-        else if(y_val_<0) {
+
+        if(y_val_<0) {
+                 val_1=map_data.tile[y1][x1];
+             val_2=map_data.tile[y1][x2];
+        if(val_2==2||val_1==2)
+        {
+            map_data.tile[y1][x1]=1;
+            map_data.tile[y1][x2]=1;
+        }
+        if(val_1==3||val_2==3) {
+            map_data.tile[y2][x1]=1;
+            map_data.tile[y2][x2]=1;
+        }
             if(map_data.tile[y1][x1]!=1||map_data.tile[y1][x2]!=1) {
                 y_pos_=(y1+1)*TILE_SIZE;
                 y_val_=0;

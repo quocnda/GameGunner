@@ -34,7 +34,7 @@ typedef struct Input{
 #define NUM_THREAT 25
 #define MAP_X 31
 
-#define MAP_Y 25
+#define MAP_Y 28
 
 
 

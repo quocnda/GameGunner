@@ -17,6 +17,7 @@ void GameMap::LoadMap(char* name)
         {
             fscanf(fp,"%d",&game_map_.tile[i][j]);
             int val = game_map_.tile[i][j];
+            std::cout<<val<<" ";
             if(val > 0)
             {
                 if(j>game_map_.max_x_)
@@ -28,8 +29,8 @@ void GameMap::LoadMap(char* name)
                     game_map_.max_y_ = i;
                 }
             }
-
         }
+        std::cout<<'\n';
     }
     game_map_.max_x_ = (game_map_.max_x_ + 1)*TILE_SIZE;
     game_map_.max_y_ = (game_map_.max_y_ + 2)*TILE_SIZE;
@@ -84,10 +85,8 @@ void GameMap::DrawMap(SDL_Renderer* screen)
         map_x = game_map_.start_x_  /TILE_SIZE;
         for(int j = x1; j < x2; j+= TILE_SIZE)
         {
-            //map_x=j/TILE_SIZE;
-
             int val = game_map_.tile[map_y][map_x];
-            if(val>0)
+            //if(val>0)
             {
                 tile_map[val].SetRect(j,i);
                 tile_map[val].Render(screen);
@@ -97,6 +96,17 @@ void GameMap::DrawMap(SDL_Renderer* screen)
        map_y++;
     }
 
+}
+void GameMap::xuatMap()
+{
+    for(int i=0;i<game_map_.max_y_;i++)
+    {
+        for(int j=0;j<game_map_.max_x_;j++)
+        {
+           std:: cout<<game_map_.tile[i][j]<<" ";
+        }
+        std::cout<<'\n';
+    }
 }
 
 
