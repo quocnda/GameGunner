@@ -247,10 +247,10 @@ bool ThreatObject::CheckToBullet(MainObject& p)
                 is_ban=true;
                 if(bullet[i]->get_type()==2)
                 {
-                    bi_ban-=3;
+                    bi_ban=bi_ban-p.get_damage_rasengan();
                 }
                 else {
-                    bi_ban--;
+                    bi_ban=bi_ban-p.get_damage_dan();
                 }
 
             bullet.erase(bullet.begin() + i);

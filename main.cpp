@@ -3,6 +3,7 @@
 #include "MainObject.h"
 #include "Map.h"
 #include "ThreatObject.h"
+#include "BossObject.h"
 
 
 using namespace std;
@@ -10,6 +11,7 @@ using namespace std;
 BaseObject gBackground;
 MainObject main_obj;
 GameMap game_map;
+BossObject p_boss;
 //ThreatObject p_threat;
 
 bool init() {
@@ -34,11 +36,26 @@ int main(int argc,char* args[])
     if(init()) {
         if(loadmedia())
         {
-
-
             main_obj.LoadImg("naruto1.png",gScreen);
             main_obj.SetClip();
             main_obj.settocdo(2);
+            p_boss.LoadImg("Boss.png",gScreen);
+            p_boss.SetClip();
+            p_boss.Set_pos(2240,448);
+
+            std::vector<Bullet*> p_bullet_boss;
+            for(int i=0;i<16;i++) {
+                Bullet* p_bullet_boss_=new Bullet();
+                p_bullet_boss_->LoadImg("laser.png",gScreen);
+                p_bullet_boss_->set_pos(2240,448);
+                p_bullet_boss_->set_val_bullet(dx[i]);
+                p_bullet_boss_->set_val_bullet_y(dy[i]);
+                p_bullet_boss_->set_is_move(true);
+                p_bullet_boss.push_back(p_bullet_boss_);
+
+            }
+            p_boss.Set_amo_list(p_bullet_boss);
+
              std::vector<ThreatObject*> p_threat;
 
              for(int i=0;i<NUM_THREAT;i++) {
@@ -103,11 +120,14 @@ int main(int argc,char* args[])
                 }*/
                 //p_threat.SetMapXY(map_data.start_x_,map_data.start_y_);
                 main_obj.DoPlayer(map_data);
-
+               p_boss.SetMapXY(map_data.start_x_,map_data.start_y_);
 
                 game_map.SetMap(map_data);
                  game_map.DrawMap(gScreen);
                  main_obj.Show(gScreen);
+
+                 p_boss.Show(gScreen);
+                 p_boss.MakeBullet(map_data,gScreen);
 
                  main_obj.HandleBullet(gScreen,map_data);
 

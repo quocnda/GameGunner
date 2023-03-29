@@ -24,6 +24,9 @@ so_rasengan=20;
  input_type.down=0;
  input_type.up=0;
 
+ damage_dan=1;
+ damage_rasengan=3;
+
  is_alive=true;
 
  toc_do=0;
@@ -293,9 +296,14 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y1][x2]=1;
             map_data.tile[y2][x2]=1;
         }
-
+         if(val1==4||val2==4) {
+             map_data.tile[y1][x2]=1;
+            map_data.tile[y2][x2]=1;
+         }
           if(val1==3||val2==3)
         {
+            damage_dan+=1;
+            damage_rasengan+=1;
             map_data.tile[y1][x2]=1;
             map_data.tile[y2][x2]=1;
         }
@@ -316,9 +324,16 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y2][x1]=1;
         }
         if(val1==3||val2==3) {
+            damage_dan+=1;
+            damage_rasengan+=1;
             map_data.tile[y1][x1]=1;
             map_data.tile[y2][x1]=1;
         }
+                 if(val1==4||val2==4) {
+             map_data.tile[y1][x2]=1;
+            map_data.tile[y2][x2]=1;
+         }
+
         if(x_val_<0) {
             if(map_data.tile[y1][x1]!=1||map_data.tile[y2][x1]!=1) {
                 x_pos_=(x1+1)*TILE_SIZE;
@@ -348,6 +363,13 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y2][x2]=1;
            }
            if(val_1==3||val_2==3) {
+            damage_dan+=1;
+            damage_rasengan+=1;
+            map_data.tile[y2][x1]=1;
+            map_data.tile[y2][x2]=1;
+           }
+           if(val_1==4||val_2==4)
+            {
             map_data.tile[y2][x1]=1;
             map_data.tile[y2][x2]=1;
            }
@@ -369,10 +391,17 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y1][x2]=1;
         }
         if(val_1==3||val_2==3) {
+            damage_dan+=1;
+            damage_rasengan+=1;
             map_data.tile[y2][x1]=1;
             map_data.tile[y2][x2]=1;
         }
-            if(map_data.tile[y1][x1]!=1||map_data.tile[y1][x2]!=1) {
+        if(val_1==4||val_2==4)
+            {
+            map_data.tile[y2][x1]=1;
+            map_data.tile[y2][x2]=1;
+           }
+            if(map_data.tile[y1][x1]!=1||map_data.tile[y1][x2]!=1){
                 y_pos_=(y1+1)*TILE_SIZE;
                 y_val_=0;
 

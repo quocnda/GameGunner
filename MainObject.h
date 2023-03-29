@@ -27,6 +27,8 @@ public:
    int gettocdo() {return toc_do;}
    void set_sodan(int x) {so_dan=x;}
    void set_rasengan(int x) {so_rasengan=x;}
+   int get_damage_dan() {return damage_dan;}
+   int get_damage_rasengan() {return damage_rasengan;}
 
    void Camera(Map& map_data);
    void SetmapXY(const int x,const int y) {map_x=x;map_y=y;}
@@ -61,6 +63,9 @@ private:
      bool da_ban;
      bool is_alive;
     int Dir;
+
+    int damage_dan;
+    int damage_rasengan;
 
      int so_dan;
      int so_rasengan;

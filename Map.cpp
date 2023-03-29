@@ -17,7 +17,7 @@ void GameMap::LoadMap(char* name)
         {
             fscanf(fp,"%d",&game_map_.tile[i][j]);
             int val = game_map_.tile[i][j];
-            std::cout<<val<<" ";
+
             if(val > 0)
             {
                 if(j>game_map_.max_x_)
@@ -30,7 +30,6 @@ void GameMap::LoadMap(char* name)
                 }
             }
         }
-        std::cout<<'\n';
     }
     game_map_.max_x_ = (game_map_.max_x_ + 1)*TILE_SIZE;
     game_map_.max_y_ = (game_map_.max_y_ + 2)*TILE_SIZE;

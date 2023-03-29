@@ -45,13 +45,16 @@ public:
     void Checktomap(Map& map_data);
     void Show1(SDL_Renderer* screen);
 
+
+    void set_col_wall() {col_wall=0;}
+    int get_col_wall() {return col_wall;}
     void HandleMove(const int& x_border, const int& y_border, Map& map_data);
     void set_pos(int x,int y) {x_pos=x;y_pos=y;}
     void Show(SDL_Renderer* des, int x, int y);
 
 private:
-    int x_val;
-    int y_val;
+    float x_val;
+    float y_val;
 
     float x_pos;
     float y_pos;
@@ -61,6 +64,8 @@ private:
 
     int map_x;
     int map_y;
+
+    int col_wall;
 
     bool is_daban;
     int Dir;

@@ -6,6 +6,7 @@ Bullet::Bullet()
     Dir=0;
     x_val=-3;
     y_val=0;
+    col_wall=0;
    // rect_.x=0;
    // rect_.y=0;
     x_pos=rect_.x;
@@ -71,6 +72,7 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
             int val2 = map_data.tile[y2][x2];
             if(val1 ==0 || val2 ==0)
             {
+                 //col_wall++;
                 is_move_ = false;
             }
         }
@@ -80,6 +82,7 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
             int val2 = map_data.tile[y2][x1];
             if(val1 ==0 || val2 ==0)
             {
+              // col_wall++;
                is_move_ = false;
             }
 
@@ -88,12 +91,15 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
 
     x_pos += x_val;
     y_pos += y_val;
+    //std::cout<<x_pos<<" "<<y_pos<<'\n';
+    //std::cout<<x_val<<" "<<y_val<<'\n';
    // rect_.x += x_val ;
     //rect_.y += y_val;
-    if(rect_.y > y_border) is_move_ = false;
-    else if(rect_.y < 0) is_move_ = false;
-    if(rect_.x > x_border) is_move_ = false;
-    else if(rect_.x < 0) is_move_ = false;
+    if(rect_.y > y_border) {is_move_ = false;}
+    else if(rect_.y < 0)  {is_move_ = false;}
+    if(rect_.x > x_border)  {is_move_ = false;}
+    else if(rect_.x < 0)  {is_move_ = false;}
+    if(abs(x_pos-map_x)+abs(y_pos-map_y)>=3000) {col_wall++;is_move_=false;}
     //std::cout << ' ' << rect_.y << ' ' << rect_.x;
     //std::cout << ' ' << rect_.y << ' ' << rect_.x;
 }
@@ -103,6 +109,7 @@ void Bullet::Show(SDL_Renderer* des, int x, int y)
     //std::cout<<rect_.x<<" "<<rect_.y<<" "<<rect_.w<<" "<<rect_.h<<'\n';
     rect_.x = x_pos - x;
     rect_.y = y_pos - y;
+    //std::cout<<rect_.x<<" "<<rect_.y<<'\n';
     //std::cout<<rect_.x<<" "<<rect_.y<<'\n';
    // std::cout<<rect_.x<<" "<<rect_.y<<'\n';
     SDL_Rect renderQuad = {rect_.x, rect_.y, rect_.w, rect_.h};

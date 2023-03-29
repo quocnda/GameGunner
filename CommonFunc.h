@@ -22,7 +22,8 @@ static SDL_Event gevent;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
 //const int toc_do=5;
-
+const float dx[16]={-1,0,1,1,1,0,-1,-1,-0.5,0,0.5,0.5,0.5,0,-0.5,-0.5};
+const float dy[16]={-1,-1,-1,0,1,1,1,0,-0.5,-0.5,-0.5,0,0.5,0.5,0.5,0.5};
 typedef struct Input{
     int left;
     int right;
@@ -32,9 +33,8 @@ typedef struct Input{
 
 #define TILE_SIZE 64
 #define NUM_THREAT 25
-#define MAP_X 31
-
-#define MAP_Y 28
+#define MAP_X 42
+#define MAP_Y 29
 
 
 
