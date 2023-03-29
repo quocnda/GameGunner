@@ -9,6 +9,8 @@ frame_banphai=0;
 frame_banphai=0;
 da_ban=false;
 
+so_dan=20;
+so_rasengan=20;
   Dir=4;
  x_pos_=0;
  y_pos_=128;
@@ -146,26 +148,34 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
          Bullet* p_amo=new Bullet();
          if(e.button.button==SDL_BUTTON_LEFT)
          {
-             p_amo->setwh(WIDTHLASER,HEIGHTLASER);
+             so_dan--;
+             if(so_dan>=0)
+             {
+                 p_amo->setwh(WIDTHLASER,HEIGHTLASER);
              p_amo->LoadImg("laser.png",screen);
              p_amo->set_type(Bullet::LASER);
              p_amo->SetDir(Dir);
+        }
+         else {so_dan=-1;}
           // std::cout<<"da duoc";
          }
          else if (e.button.button==SDL_BUTTON_RIGHT)
          {
-             p_amo->setwh(WIDTHSPHERE,HEIGHTSPHERE);
-            bool check= p_amo->LoadImg("sphere.png",screen);
-             if(!check)
+             so_rasengan--;
+             if(so_rasengan>=0)
              {
-                 std::cout<<"loi load dan";
-             }
+                 p_amo->setwh(WIDTHSPHERE,HEIGHTSPHERE);
+             p_amo->LoadImg("sphere.png",screen);
              p_amo->set_type(Bullet::SPHERE);
              p_amo->SetDir(Dir);
-             //p_amo->set_val_bullet(1);
+             }
+             else {so_rasengan=-1;}
+
+
          }
         // p_amo->SetRect(this->rect_.x+this->rect_.w/5-5,this->rect_.y+this->rect_.h*0.25);
-
+        if(so_dan>=0||so_rasengan>=0)
+        {
             p_amo->set_pos(x_pos_, y_pos_);
          if(p_amo->get_type()==2) {
              if(p_amo->GetDir()==3) {
@@ -186,6 +196,8 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
          }
          p_amo->set_is_move(true);
          p_amo_list.push_back(p_amo);
+        }
+            std::cout<<"so dan "<<so_dan<<" so rasengan "<<so_rasengan<<'\n';
      }
 }
 void MainObject::SetClip()
@@ -276,6 +288,8 @@ void MainObject::checktomap(Map & map_data) {
         int val2=map_data.tile[y2][x2];
         if(val1==2||val2==2)
         {
+            so_dan+=10;
+            so_rasengan+=10;
             map_data.tile[y1][x2]=1;
             map_data.tile[y2][x2]=1;
         }
@@ -296,6 +310,8 @@ void MainObject::checktomap(Map & map_data) {
         val1=map_data.tile[y1][x1];
         val2=map_data.tile[y2][x1];
         if(val1==2||val2==2) {
+                so_dan+=10;
+            so_rasengan+=10;
             map_data.tile[y1][x1]=1;
             map_data.tile[y2][x1]=1;
         }
@@ -326,6 +342,8 @@ void MainObject::checktomap(Map & map_data) {
         if(y_val_>0) {
                 if(val_1==2||val_2==2)
             {
+                so_dan+=10;
+            so_rasengan+=10;
             map_data.tile[y2][x1]=1;
             map_data.tile[y2][x2]=1;
            }
@@ -345,6 +363,8 @@ void MainObject::checktomap(Map & map_data) {
              val_2=map_data.tile[y1][x2];
         if(val_2==2||val_1==2)
         {
+            so_dan+=10;
+            so_rasengan+=10;
             map_data.tile[y1][x1]=1;
             map_data.tile[y1][x2]=1;
         }

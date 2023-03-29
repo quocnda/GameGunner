@@ -143,7 +143,7 @@ int main(int argc,char* args[])
 
 
 
-                 SDL_Delay(5);
+                 SDL_Delay(10);
                   SDL_RenderPresent(gScreen);
 
 

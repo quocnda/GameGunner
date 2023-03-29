@@ -25,6 +25,8 @@ public:
 
    void settocdo(int x) {toc_do=x;}
    int gettocdo() {return toc_do;}
+   void set_sodan(int x) {so_dan=x;}
+   void set_rasengan(int x) {so_rasengan=x;}
 
    void Camera(Map& map_data);
    void SetmapXY(const int x,const int y) {map_x=x;map_y=y;}
@@ -60,6 +62,8 @@ private:
      bool is_alive;
     int Dir;
 
+     int so_dan;
+     int so_rasengan;
      SDL_Rect clip_right[6];
      SDL_Rect clip_left[6];
      SDL_Rect clip_dungyen[6];
