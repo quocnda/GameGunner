@@ -49,7 +49,7 @@ void Bullet::handlemoverighttoleft()
     }
 }
 
-void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
+void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data,int x,int y)
 {
 
 
@@ -72,6 +72,7 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
             int val2 = map_data.tile[y2][x2];
             if(val1 ==0 || val2 ==0)
             {
+                //std::cout<<" da vao day 1"<<'\n';
                  //col_wall++;
                 is_move_ = false;
             }
@@ -82,6 +83,7 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
             int val2 = map_data.tile[y2][x1];
             if(val1 ==0 || val2 ==0)
             {
+               // std::cout<<"da vao day"<<'\n';
               // col_wall++;
                is_move_ = false;
             }
@@ -99,7 +101,14 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data)
     else if(rect_.y < 0)  {is_move_ = false;}
     if(rect_.x > x_border)  {is_move_ = false;}
     else if(rect_.x < 0)  {is_move_ = false;}
-    if(abs(x_pos-map_x)+abs(y_pos-map_y)>=3000) {col_wall++;is_move_=false;}
+    //std::cout<<"x_pos "<<x_pos<<" "<<"y_pos "<<y_pos<<'\n';
+   // std::cout<<"map_x "<<x<<" "<<"map_y "<<y<<'\n';
+    /*if(abs(x_pos-x)+abs(y_pos-y)<=1500)
+    {
+           std::cout<<x_pos-x<<" "<<y_pos-y<<'\n';
+    }*/
+
+    if(abs(x_pos-x)+abs(y_pos-y)>=1500) {col_wall++;is_move_=false;}
     //std::cout << ' ' << rect_.y << ' ' << rect_.x;
     //std::cout << ' ' << rect_.y << ' ' << rect_.x;
 }

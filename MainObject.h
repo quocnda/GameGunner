@@ -3,6 +3,7 @@
 #include "CommonFunc.h"
 #include "BaseObject.h"
 #include "BulletObject.h"
+#include "Audio.h"
 //#include "ThreatObject.h"
 
 
@@ -29,6 +30,8 @@ public:
    void set_rasengan(int x) {so_rasengan=x;}
    int get_damage_dan() {return damage_dan;}
    int get_damage_rasengan() {return damage_rasengan;}
+   int get_sodan() {return so_dan;}
+   int get_sorasengan() {return so_rasengan;}
 
    void Camera(Map& map_data);
    void SetmapXY(const int x,const int y) {map_x=x;map_y=y;}
@@ -38,6 +41,8 @@ public:
    void RemoveBullet(const int &idx);
    void HandleBullet(SDL_Renderer* screen, Map& map_data);
 
+   void Set_blood_main(int x) {blood_main=x;}
+   int Get_blood_main() {return blood_main;}
    //void ChecktoBullet(ThreatObject& p_threat);
 
 
@@ -52,6 +57,8 @@ private:
      int Main_width;
      int Main_height;
 
+     Audio m_rasengan;
+     Audio m_dan;
      Input input_type;
      int frame_;//left
      int frame_1;//right
@@ -74,9 +81,14 @@ private:
      SDL_Rect clip_dungyen[6];
      SDL_Rect clip_bandanphai[6];
      SDL_Rect clip_bandantrai[6];
+     SDL_Rect clip_move_up[6];
+     SDL_Rect clip_move_down[6];
+     int frame_up;
+     int frame_down;
 
      int toc_do;
 
+     int blood_main;
      int map_x;
      int map_y;
 

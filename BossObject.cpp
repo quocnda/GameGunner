@@ -12,6 +12,8 @@ BossObject::BossObject()
     map_y=0;
     frame=0;
 
+    is_alive=true;
+    bi_ban=10;
     count_bullet_col_wall=0;
 }
 BossObject::~BossObject()
@@ -24,7 +26,6 @@ bool BossObject::LoadImg(std::string path,SDL_Renderer* screen)
     if(ret) {
          Boss_width=rect_.w/24+1;
          Boss_height=rect_.h-1;
-         std::cout<<Boss_width<<" "<<Boss_height<<'\n';
     }
     //std::cout<<Main_width<<" "<<Main_height<<'\n';
     return ret;
@@ -52,18 +53,14 @@ void BossObject::Show(SDL_Renderer* screen)
 }
 void BossObject::MakeBullet(Map& map_data,SDL_Renderer* screen)
 {
-     /*p_bullet_list[0]->HandleMove(0,0,map_data);
-        if(p_bullet_list[0]->get_col_wall()!=0)
-        {
-            std::cout<<count_bullet_col_wall<<" ";
-            count_bullet_col_wall++;
-        }
-       p_bullet_list[0]->Show(screen,map_x,map_y);
 
-    */
-    for(int i=0;i<16;i++) {
+     if(p_bullet_list.size()<=14) {
+        p_bullet_list=p_bullet_du_phong;
+     }
+
+    for(int i=0;i<p_bullet_list.size();i++) {
            // std::cout<<p_bullet_list[i]->toa_do_x()<<" "<<p_bullet_list[i]->toa_do_y()<<'\n';
-        p_bullet_list[i]->HandleMove(SCREEN_WIDTH-10,SCREEN_HEIGHT-10,map_data);
+        p_bullet_list[i]->HandleMove(SCREEN_WIDTH-10,SCREEN_HEIGHT-10,map_data,map_x,map_y);
         if(p_bullet_list[i]->get_col_wall()!=0)
         {
             count_bullet_col_wall++;
@@ -72,12 +69,69 @@ void BossObject::MakeBullet(Map& map_data,SDL_Renderer* screen)
     }
     if(count_bullet_col_wall>=15)
     {
+        count_bullet_col_wall=0;
+        /*p_bullet_list=p_bullet_du_phong;
+        count_bullet_col_wall=0;*/
+        //std::cout<<count_bullet_col_wall<<'\n';
         for(int i=0;i<16;i++)
         {
             p_bullet_list[i]->set_col_wall();
-            count_bullet_col_wall=0;
+
             p_bullet_list[i]->set_is_move(true);
-            p_bullet_list[i]->set_pos(x_pos,y_pos);
+            //p_bullet_list[i]->set_pos(x_pos,y_pos);
+           if(i<8) { p_bullet_list[i]->set_pos(x_pos,y_pos);}
+           else {p_bullet_list[i]->set_pos(x_pos-10,y_pos+10);}
         }
     }
+
+}
+bool BossObject::CheckToBullet(MainObject& p)
+{
+     bool is_ban=false;
+    std::vector<Bullet*> bullet = p.Getamo();
+    SDL_Rect mainRect = this->rect_;
+    mainRect.w=mainRect.w/5-10;
+    mainRect.h=mainRect.h-2;
+    SDL_Rect subRect = p.GetRect();
+    subRect.w=subRect.w/6;
+    subRect.x+=4;
+    subRect.h=subRect.h/5;
+    subRect.y=subRect.y+5;
+   //std::cout<<p_bullet_list.size()<<'\n';
+    for(int i=0;i<p_bullet_list.size();i++)
+    {
+        SDL_Rect tmp_rect=p_bullet_list[i]->GetRect();
+        if(checkCollision(subRect,tmp_rect))
+        {
+            std::cout<<i<<'\n';
+           p.set_alive(false);
+           //std::cout<<"Main "<<subRect.x<<" "<<subRect.y<<" "<<subRect.w<<" "<<subRect.h<<'\n';
+           //std::cout<<"bullet "<<tmp_rect.x<<" "<<tmp_rect.y<<" "<<tmp_rect.w<<" "<<tmp_rect.h<<'\n';
+            p_bullet_list.erase(p_bullet_list.begin()+i);
+            //p_bullet_list=p_bullet_du_phong;
+           //
+        }
+
+    }
+    for(int i = 0; i < bullet.size(); i++){
+        SDL_Rect tmpRect = bullet[i]->GetRect();
+        if(checkCollision(mainRect, tmpRect)){
+                is_ban=true;
+                if(bullet[i]->get_type()==2)
+                {
+                    bi_ban=bi_ban-p.get_damage_rasengan();
+                }
+                else {
+                    bi_ban=bi_ban-p.get_damage_dan();
+                }
+
+            bullet.erase(bullet.begin() + i);
+            p.Setamolist(bullet);
+        }
+    }
+    if(bi_ban<=0)
+    {
+       is_alive=false;
+    }
+    return is_ban;
 }

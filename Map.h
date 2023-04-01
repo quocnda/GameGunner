@@ -6,7 +6,7 @@
 #include "BaseObject.h"
 
 
-#define MAX_TILES 5
+#define MAX_TILES 10
 
 class TileMap : public BaseObject
 {

@@ -229,17 +229,17 @@ bool ThreatObject::CheckToBullet(MainObject& p)
     bool is_ban=false;
     std::vector<Bullet*> bullet = p.Getamo();
     SDL_Rect mainRect = this->rect_;
-    mainRect.w=mainRect.w/5-10;
+    mainRect.w=mainRect.w/5-21;
 
-    mainRect.h=mainRect.h-2;
+    mainRect.h=mainRect.h/2-2;
     SDL_Rect subRect = p.GetRect();
     subRect.w=subRect.w/6;
     subRect.x+=4;
     subRect.h=subRect.h/5;
     subRect.y=subRect.y+5;
     if(checkCollision(mainRect, subRect))  {
-            std::cout<<mainRect.x<<" "<<mainRect.y<<" "<<mainRect.w<<" "<<mainRect.h<<'\n';
-    std::cout<<subRect.x<<" "<<subRect.y<<" "<<subRect.w<<" "<<subRect.h<<'\n';p.set_alive(false);
+    p.set_alive(false);
+    is_alive_=false;
     }
     for(int i = 0; i < bullet.size(); i++){
         SDL_Rect tmpRect = bullet[i]->GetRect();
@@ -281,45 +281,4 @@ bool ThreatObject::CheckToBullet(MainObject& p)
 
     }
 }*/
-void ThreatObject::InitBullet (Bullet* p_amo,SDL_Renderer* screen)
-{
-    if(p_amo!=NULL){
-        bool ret=p_amo->LoadImg("sphere.png",screen);
-        if(ret)
-        {
-            p_amo->set_is_move(true);
-            p_amo->SetRect(x_pos,y_pos+10);
-            p_amo->set_val_bullet(5);
 
-            p_amo_list.push_back(p_amo);
-        }
-    }
-}
-void ThreatObject::MakeBullet(SDL_Renderer* screen,const int x_limit,const int y_limit)
-{
-
-     //std::cout<<map_x<<" "<<map_y<<'\n';
-    for(int i=0;i<p_amo_list.size();i++) {
-
-        Bullet* p_amo=p_amo_list.at(i);
-        if(p_amo!=NULL)
-        {
-            if(p_amo->get_is_move())
-            {
-
-                 p_amo->moveleft(SCREEN_WIDTH,SCREEN_HEIGHT,map_x,map_y);
-                 p_amo->Show(screen,map_x,map_y);
-            }
-            else
-            {
-                std::cout<<"da vao day"<<'\n';
-                p_amo->set_is_move(true);
-              //  std::cout<<this->rect_.x+this->rect_.w<<" "<<this->rect_.y<<'\n';
-                p_amo->SetRect(this->rect_.x+this->rect_.w,this->rect_.y);
-                p_amo->set_pos(this->rect_.x+this->rect_.w,this->rect_.y);
-               // std::cout<<p_amo->toa_do_x()<<" "<<p_amo->toa_do_y()<<'\n';
-                std::cout<<"map_y "<<map_y<<'\n';
-            }
-        }
-    }
-}

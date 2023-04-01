@@ -8,9 +8,11 @@ frame_0=0;
 frame_banphai=0;
 frame_banphai=0;
 da_ban=false;
-
-so_dan=20;
-so_rasengan=20;
+frame_down=0;
+frame_up=0;
+blood_main=0;
+so_dan=40;
+so_rasengan=40;
   Dir=4;
  x_pos_=0;
  y_pos_=128;
@@ -41,8 +43,10 @@ bool MainObject::LoadImg(std::string path,SDL_Renderer* screen)
     bool ret=BaseObject::LoadImg(path,screen);
     if(ret) {
          Main_width=rect_.w/6;
-         Main_height=rect_.h/5;
+         Main_height=rect_.h/9;
     }
+     m_dan.LoadMusic("Shuriken.mp3");
+     m_rasengan.LoadMusic("Rasengan.mp3");
     //std::cout<<Main_width<<" "<<Main_height<<'\n';
     return ret;
 }
@@ -57,6 +61,10 @@ void MainObject::Show(SDL_Renderer* screen)
             frame_banphai++;
         }
     }
+    else if(status_==0)
+    {
+        frame_0=0;
+    }
     else {
     if(input_type.right==1||input_type.up==1||input_type.down==1||input_type.left==1)
      {
@@ -66,19 +74,22 @@ void MainObject::Show(SDL_Renderer* screen)
        else if(status_==4) {
                   frame_1++;
        }
-     else  if(status_==0)
-    {
-        frame_0++;
-    }
-       else {
-        frame_1++;
-        frame_++;
+       else if(status_==1)
+       {
+           frame_up++;
+       }
+       else if(status_==2)
+       {
+           frame_down++;
        }
        if(frame_1>=6) {frame_1=0;}
        if(frame_>=6) {frame_=0;}
+       if(frame_down>=6) {frame_down=0;}
+       if(frame_up>=6) {frame_up=0;}
 
      }
     }
+    //if(frame_0>=6) {frame_0=0;}
     if(frame_banphai>=7) {frame_banphai=0;da_ban=false;}
        if(frame_bantrai>=7) {frame_bantrai=0;da_ban=false;}
     rect_.x=x_pos_-map_x;
@@ -90,7 +101,7 @@ void MainObject::Show(SDL_Renderer* screen)
     }
     else
     {
-        if(status_==0&&da_ban)
+        if(status_==0&&da_ban&&(Dir==3||Dir==4))
         {
             if(Dir==4) {
                 current_clip=&clip_bandanphai[frame_banphai];
@@ -98,22 +109,35 @@ void MainObject::Show(SDL_Renderer* screen)
             else if (Dir==3) {
                 current_clip=&clip_bandantrai[frame_bantrai];
             }
-
+        }
+        else if(status_==0&&da_ban&&(Dir==2||Dir==1))
+        {
+            if(Dir==1) {
+                current_clip=&clip_move_up[frame_up];
+            }
+            else {
+                current_clip=&clip_move_down[frame_down];
+            }
         }
         else {
           if(Dir==4) {
-        if(status_==4||status_==2||status_==1)  {
+        if(status_==4)  {
                 current_clip=&clip_right[frame_1];
-         }
-    }
-    else if (Dir==3) {
-             if(status_==3||status_==1||status_==2) {
+           }
+      }
+        else if (Dir==3) {
+             if(status_==3) {
              current_clip=&clip_left[frame_];
             }
           }
+          else if(Dir==1&&status_==1) {
+                current_clip=&clip_move_up[frame_up];
+            }
+            else if(Dir==2&&status_==2) {
+                current_clip=&clip_move_down[frame_down];
+            }
         }
     }
-
 
     SDL_Rect renderquad={rect_.x,rect_.y,Main_width,Main_height};
     SDL_RenderCopy(screen,p_object_,current_clip,&renderquad);
@@ -125,8 +149,8 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
     {
          switch( e.key.keysym.sym )
         {
-            case SDLK_w: status_=1;input_type.up=1;input_type.down=0;input_type.left=0;input_type.right=0; break;
-            case SDLK_s: status_=2;input_type.up=0;input_type.down=1;input_type.left=0;input_type.right=0; break;
+            case SDLK_w: status_=1;input_type.up=1;input_type.down=0;input_type.left=0;input_type.right=0;Dir=1; break;
+            case SDLK_s: status_=2;input_type.up=0;input_type.down=1;input_type.left=0;input_type.right=0;Dir=2; break;
             case SDLK_a: status_=3;input_type.up=0;input_type.down=0;input_type.left=1;input_type.right=0;Dir=3; break;
             case SDLK_d: status_=4;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=1;Dir=4; break;
 
@@ -137,8 +161,8 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
     {
          switch( e.key.keysym.sym )
         {
-           case SDLK_w: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0; break;
-            case SDLK_s: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0; break;
+           case SDLK_w: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=1; break;
+            case SDLK_s: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=2; break;
             case SDLK_a: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=3; break;
             case SDLK_d: status_=0;input_type.up=0;input_type.down=0;input_type.left=0;input_type.right=0;Dir=4; break;
 
@@ -158,6 +182,9 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
              p_amo->LoadImg("laser.png",screen);
              p_amo->set_type(Bullet::LASER);
              p_amo->SetDir(Dir);
+
+             m_rasengan.playMusic();
+
         }
          else {so_dan=-1;}
           // std::cout<<"da duoc";
@@ -167,9 +194,13 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
              so_rasengan--;
              if(so_rasengan>=0)
              {
+
+                 m_dan.playMusic();
+
                  p_amo->setwh(WIDTHSPHERE,HEIGHTSPHERE);
-             p_amo->LoadImg("sphere.png",screen);
-             p_amo->set_type(Bullet::SPHERE);
+            bool t= p_amo->LoadImg("map_game/sphere.png",screen);
+             if(!t) {std::cout<<SDL_GetError()<<'\n';}
+            p_amo->set_type(Bullet::SPHERE);
              p_amo->SetDir(Dir);
              }
              else {so_rasengan=-1;}
@@ -184,8 +215,17 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
              if(p_amo->GetDir()==3) {
             p_amo->set_val_bullet(-2);
              }
-         else {
+         else if(p_amo->GetDir()==4) {
             p_amo->set_val_bullet(2);
+           }
+           else if(p_amo->GetDir()==1)
+           {
+               p_amo->set_val_bullet_y(-2);
+               p_amo->set_val_bullet(0);
+           }
+           else {
+            p_amo->set_val_bullet_y(2);
+            p_amo->set_val_bullet(0);
            }
          }
          else
@@ -193,14 +233,21 @@ void MainObject::handle(SDL_Event &e,SDL_Renderer* screen)
               if(p_amo->GetDir()==3) {
             p_amo->set_val_bullet(-10);
            }
-           else {
+           else if(p_amo->GetDir()==4){
             p_amo->set_val_bullet(10);
+         }
+         else if(p_amo->GetDir()==1){
+            p_amo->set_val_bullet_y(-10);
+            p_amo->set_val_bullet(0);
+         }
+         else if(p_amo->GetDir()==2){
+            p_amo->set_val_bullet_y(10);
+            p_amo->set_val_bullet(0);
          }
          }
          p_amo->set_is_move(true);
          p_amo_list.push_back(p_amo);
         }
-            std::cout<<"so dan "<<so_dan<<" so rasengan "<<so_rasengan<<'\n';
      }
 }
 void MainObject::SetClip()
@@ -237,6 +284,21 @@ void MainObject::SetClip()
         clip_right[i].y=4*Main_height;
         clip_right[i].w=Main_width;
         clip_right[i].h=Main_height;
+    }
+
+    for(int i=0;i<=5;i++)
+    {
+        clip_move_down[i].x=i*Main_width;
+        clip_move_down[i].y=7*Main_height;
+        clip_move_down[i].w=Main_width;
+        clip_move_down[i].h=Main_height;
+    }
+    for(int i=0;i<=5;i++)
+    {
+        clip_move_up[i].x=i*Main_width;
+        clip_move_up[i].y=8*Main_height;
+        clip_move_up[i].w=Main_width;
+        clip_move_up[i].h=Main_height;
     }
 
 }
@@ -307,6 +369,13 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y1][x2]=1;
             map_data.tile[y2][x2]=1;
         }
+        if(val1==5||val2==5)
+        {
+            map_data.tile[y1][x2]=1;
+            map_data.tile[y2][x2]=1;
+            blood_main+=1;
+
+        }
         if(x_val_>0) {
             if(map_data.tile[y1][x2]!=1||map_data.tile[y2][x2]!=1) {
                 x_pos_=x2*TILE_SIZE;
@@ -330,8 +399,13 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y2][x1]=1;
         }
                  if(val1==4||val2==4) {
-             map_data.tile[y1][x2]=1;
-            map_data.tile[y2][x2]=1;
+             map_data.tile[y1][x1]=1;
+            map_data.tile[y2][x1]=1;
+         }
+         if(val1==5||val2==5) {
+            map_data.tile[y1][x1]=1;
+            map_data.tile[y2][x1]=1;
+            blood_main+=1;
          }
 
         if(x_val_<0) {
@@ -341,8 +415,6 @@ void MainObject::checktomap(Map & map_data) {
             }
         }
     }
-
-
     int width_min=Main_width<TILE_SIZE ? Main_width : TILE_SIZE;
     x1=(x_pos_)/TILE_SIZE;
     x2=(x_pos_+width_min)/TILE_SIZE;
@@ -373,6 +445,13 @@ void MainObject::checktomap(Map & map_data) {
             map_data.tile[y2][x1]=1;
             map_data.tile[y2][x2]=1;
            }
+           if(val_1==5||val_2==5) {
+            map_data.tile[y2][x1]=1;
+            map_data.tile[y2][x2]=1;
+            blood_main+=1;
+
+           }
+
             if(map_data.tile[y2][x1]!=1||map_data.tile[y2][x2]!=1) {
                 y_pos_=y2*TILE_SIZE;
                 y_pos_-=(Main_height+1);
@@ -393,13 +472,19 @@ void MainObject::checktomap(Map & map_data) {
         if(val_1==3||val_2==3) {
             damage_dan+=1;
             damage_rasengan+=1;
-            map_data.tile[y2][x1]=1;
-            map_data.tile[y2][x2]=1;
+            map_data.tile[y1][x1]=1;
+            map_data.tile[y1][x2]=1;
         }
         if(val_1==4||val_2==4)
             {
-            map_data.tile[y2][x1]=1;
-            map_data.tile[y2][x2]=1;
+                std::cout<<"da vao day"<<'\n';
+            map_data.tile[y1][x1]=1;
+            map_data.tile[y1][x2]=1;
+           }
+           if(val_1==5||val_2==5) {
+                map_data.tile[y1][x1]=1;
+            map_data.tile[y1][x2]=1;
+                blood_main+=1;
            }
             if(map_data.tile[y1][x1]!=1||map_data.tile[y1][x2]!=1){
                 y_pos_=(y1+1)*TILE_SIZE;
@@ -465,7 +550,7 @@ void MainObject::HandleBullet(SDL_Renderer* screen,Map& map_data)
             if(p_amo_list[i]->get_is_move() == true)
             {
 
-                p_amo_list[i]->HandleMove(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, map_data);
+                p_amo_list[i]->HandleMove(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, map_data,map_x,map_y);
                 p_amo_list[i]->Show(screen, map_x, map_y);
             }
             else

@@ -49,8 +49,7 @@ class ThreatObject : public BaseObject
 
         void SetBullet(std::vector<Bullet*> amo_list) {p_amo_list=amo_list;}
        std::vector<Bullet*> GetBullet() {return p_amo_list;}
-       void InitBullet (Bullet* p_bullet,SDL_Renderer* screen);
-        void MakeBullet(SDL_Renderer* screen, const int x_limit,const int y_limit);
+
     private:
         int map_x;
         int map_y;

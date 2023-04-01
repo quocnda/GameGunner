@@ -31,6 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Audio.cpp" />
+		<Unit filename="Audio.h" />
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />
 		<Unit filename="BossObject.cpp" />
@@ -45,6 +47,10 @@
 		<Unit filename="MainObject.h" />
 		<Unit filename="Map.cpp" />
 		<Unit filename="Map.h" />
+		<Unit filename="PlayPower.cpp" />
+		<Unit filename="PlayPower.h" />
+		<Unit filename="TextObject.cpp" />
+		<Unit filename="TextObject.h" />
 		<Unit filename="ThreatObject.cpp" />
 		<Unit filename="ThreatObject.h" />
 		<Unit filename="main.cpp" />

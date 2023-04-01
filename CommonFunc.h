@@ -3,6 +3,7 @@
 
 #include <SDL_image.h>
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <iostream>
 #include <unistd.h>
 #include <vector>
@@ -18,12 +19,13 @@ static SDL_Renderer* gScreen=NULL;
 static SDL_Texture* gText=NULL;
 static SDL_Event gevent;
 
+static
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
 //const int toc_do=5;
-const float dx[16]={-1,0,1,1,1,0,-1,-1,-0.5,0,0.5,0.5,0.5,0,-0.5,-0.5};
-const float dy[16]={-1,-1,-1,0,1,1,1,0,-0.5,-0.5,-0.5,0,0.5,0.5,0.5,0.5};
+const float dx[16]={-1,0,1,1,1,0,-1,-1,-2,0,2,2,2,0,-2,-2};
+const float dy[16]={-1,-1,-1,0,1,1,1,0,-2,-2,-2,0,2,2,2,0};
 typedef struct Input{
     int left;
     int right;
@@ -36,6 +38,14 @@ typedef struct Input{
 #define MAP_X 42
 #define MAP_Y 29
 
+#define BOSS_POS_X 448
+#define BOSS_POS_Y 704
+
+#define BOSS_POS_X_1 1728
+#define BOSS_POS_Y_1 896
+
+#define BOSS_POS_X_2 1728
+#define BOSS_POS_Y_2 1536
 
 
 typedef struct Map
