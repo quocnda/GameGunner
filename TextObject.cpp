@@ -5,6 +5,7 @@ TextObject::TextObject() {
   text_color_.g=255;
   text_color_.b=255;
   texture=NULL;
+  str_val_="";
 }
 TextObject::~TextObject()
 {
@@ -26,7 +27,6 @@ void TextObject::Free() {
 if(texture!=NULL) {
     SDL_DestroyTexture(texture);
     texture=NULL;
-
 }
 }
 void TextObject::SetColor(Uint8 red,Uint8 green,Uint8 blue)
@@ -62,4 +62,38 @@ void TextObject::RenderText(SDL_Renderer* screen,int xp,int yp,SDL_Rect* clip, d
         RenderQuad.h=clip->h;
     }
     SDL_RenderCopyEx(screen,texture,clip,&RenderQuad,angle,center,flip);
+}
+bool TextObject::LoadText(char* name)
+{
+    int k=0;
+    FILE* fp = NULL;
+    fopen_s(&fp, name,"rb");
+    if(fp == NULL)
+    {
+        return false ;
+    }
+
+    for(int i = 0; i<2; i++)
+    {
+        for(int j = 0; j<8; j++)
+        {
+            fscanf(fp,"%d",&introduction[i][j]);
+            char t=introduction[i][j];
+            std::cout<<t<<' ';
+        }
+    }
+    fclose(fp);
+    return true;
+}
+void TextObject::xuat_char()
+{
+    for(int i=0;i<2;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            std::cout<<'1';
+            std::cout<<introduction[i][j];
+        }
+        std::cout<<'\n';
+    }
 }

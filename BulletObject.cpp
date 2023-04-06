@@ -66,51 +66,66 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data,
     y2 = (y_pos + height_min -1) / TILE_SIZE;
 
     if(x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y){
-        if(x_val > 0)   //main object dang di chuyen ve ben phai
+        if(x_val > 0)
         {
             int val1 = map_data.tile[y1][x2];
             int val2 = map_data.tile[y2][x2];
             if(val1 ==0 || val2 ==0)
             {
-                //std::cout<<" da vao day 1"<<'\n';
-                 //col_wall++;
                 is_move_ = false;
             }
         }
-        else if(x_val < 0)   //main object dang di chuyen ve ben phai
+        else if(x_val < 0)
         {
             int val1 = map_data.tile[y1][x1];
             int val2 = map_data.tile[y2][x1];
             if(val1 ==0 || val2 ==0)
             {
-               // std::cout<<"da vao day"<<'\n';
-              // col_wall++;
                is_move_ = false;
             }
 
         }
     }
 
+    int width_min = FRAME < TILE_SIZE ? FRAME : TILE_SIZE;
+    x1 = (x_pos) / TILE_SIZE;
+    x2 = (x_pos + width_min - 1) / TILE_SIZE;
+
+    y1 = (y_pos + y_val) / TILE_SIZE;
+    y2 = (y_pos + y_val + FRAME - 1) / TILE_SIZE;
+
+    if(x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y){
+        if(y_val > 0)   //main object dang di chuyen ve xuong
+        {
+            int val1 = map_data.tile[y2][x1];
+            int val2 = map_data.tile[y2][x2];
+            if((val1!=1) || val2!=1){
+                    is_move_=false;
+            }
+        }
+        else if(y_val < 0)   //main object dang di chuyen ve ben phai
+        {
+            int val1 = map_data.tile[y1][x1];
+            int val2 = map_data.tile[y1][x2];
+            if(val1!=1 || val2!=1){
+                   is_move_=false;
+            }
+        }
+    }
+
+
+
     x_pos += x_val;
     y_pos += y_val;
-    //std::cout<<x_pos<<" "<<y_pos<<'\n';
-    //std::cout<<x_val<<" "<<y_val<<'\n';
-   // rect_.x += x_val ;
-    //rect_.y += y_val;
+
     if(rect_.y > y_border) {is_move_ = false;}
     else if(rect_.y < 0)  {is_move_ = false;}
     if(rect_.x > x_border)  {is_move_ = false;}
     else if(rect_.x < 0)  {is_move_ = false;}
-    //std::cout<<"x_pos "<<x_pos<<" "<<"y_pos "<<y_pos<<'\n';
-   // std::cout<<"map_x "<<x<<" "<<"map_y "<<y<<'\n';
-    /*if(abs(x_pos-x)+abs(y_pos-y)<=1500)
-    {
-           std::cout<<x_pos-x<<" "<<y_pos-y<<'\n';
-    }*/
+
 
     if(abs(x_pos-x)+abs(y_pos-y)>=1500) {col_wall++;is_move_=false;}
-    //std::cout << ' ' << rect_.y << ' ' << rect_.x;
-    //std::cout << ' ' << rect_.y << ' ' << rect_.x;
+
 }
 
 void Bullet::Show(SDL_Renderer* des, int x, int y)

@@ -17,7 +17,9 @@ void GameMap::LoadMap(char* name)
         {
             fscanf(fp,"%d",&game_map_.tile[i][j]);
             int val = game_map_.tile[i][j];
-
+             if(val==7) {
+                std::cout<<i<<" "<<j<<'\n';
+             }
             if(val > 0)
             {
                 if(j>game_map_.max_x_)
@@ -47,7 +49,7 @@ void GameMap::LoadTiles(SDL_Renderer* screen)
     FILE* fp = NULL;
     for(int i = 0; i < MAX_TILES; i++)
     {
-        sprintf_s(file_img,"map_game/%d.png",i);
+        sprintf_s(file_img,"image/%d.png",i);
         fopen_s(&fp, file_img,"rb");
         if(fp == NULL)
         {
@@ -103,8 +105,13 @@ void GameMap::xuatMap()
     {
         for(int j=0;j<game_map_.max_x_;j++)
         {
-           std:: cout<<game_map_.tile[i][j]<<" ";
+            std::cout<<game_map_.tile[i][j]<<" ";
+           if(game_map_.tile[i][j]==7) {
+
+            std::cout<<i<<" "<<j<<'\n';
+           }
         }
+
         std::cout<<'\n';
     }
 }

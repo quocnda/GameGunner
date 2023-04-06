@@ -9,6 +9,7 @@
 #include <vector>
 #include <ostream>
 #include <cstdlib>
+#include <stdlib.h>
 #include <ctime>
 #include <SDL_ttf.h>
 #include<SDL_mixer.h>
@@ -18,8 +19,8 @@ static SDL_Window* gWindow=NULL;
 static SDL_Renderer* gScreen=NULL;
 static SDL_Texture* gText=NULL;
 static SDL_Event gevent;
+static SDL_Rect menu_pos[3];
 
-static
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
@@ -33,7 +34,7 @@ typedef struct Input{
     int down;
 };
 
-#define TILE_SIZE 64
+const int TILE_SIZE=64;
 #define NUM_THREAT 25
 #define MAP_X 42
 #define MAP_Y 29
@@ -59,7 +60,17 @@ typedef struct Map
     int tile[MAP_Y][MAP_X];
     char *file_name;
 };
+static void SetPosMenu()
+{
+    menu_pos[0].x=SCREEN_WIDTH*0.2;
+    menu_pos[0].y=SCREEN_HEIGHT*0.5;
 
+    menu_pos[1].x=SCREEN_WIDTH*0.2;
+    menu_pos[1].y=SCREEN_HEIGHT*0.5+70;
+
+    menu_pos[2].x=SCREEN_WIDTH*0.2;
+    menu_pos[2].y=SCREEN_HEIGHT*0.5+140;
+}
 static bool checkCollision( SDL_Rect a, SDL_Rect b )
 {
     //The sides of the rectangles
@@ -103,5 +114,12 @@ static bool checkCollision( SDL_Rect a, SDL_Rect b )
 
     //If none of the sides from A are outside B
     return true;
+}
+
+static bool check_mouse(const int& x, const int& y, const SDL_Rect& rect) {
+    if (x >= rect.x && x <= rect.x + rect.w && y >= rect.y && y <= rect.y + rect.h) {
+        return true;
+    }
+    return false;
 }
 #endif // COMMON_FUNC_H_

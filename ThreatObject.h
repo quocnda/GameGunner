@@ -17,14 +17,6 @@ class ThreatObject : public BaseObject
         ThreatObject();
         ~ThreatObject();
 
-       /* enum GhostDirection
-        {
-            DIR_UP = 25,
-            DIR_LEFT = 26,
-            DIR_DOWN = 27,
-            DIR_RIGHT = 28,
-        };
-        */
         bool LoadImg(std::string path,SDL_Renderer* screen);
         void SetClip();
 
@@ -72,6 +64,7 @@ class ThreatObject : public BaseObject
         int Threat_height;
 
         bool is_alive_;
+
 
         int bi_ban;
         std::vector<Bullet*> p_amo_list;

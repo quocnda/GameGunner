@@ -49,6 +49,7 @@ private:
     int Boss_height;
     SDL_Rect clip_boss[24];
     bool is_alive;
+    Audio A;
 
     std::vector<Bullet*> p_bullet_list;
     std::vector<Bullet*> p_bullet_du_phong;

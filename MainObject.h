@@ -4,7 +4,6 @@
 #include "BaseObject.h"
 #include "BulletObject.h"
 #include "Audio.h"
-//#include "ThreatObject.h"
 
 
 class MainObject:public BaseObject
@@ -17,6 +16,7 @@ public:
    void handle(SDL_Event &e,SDL_Renderer* screen);
    void SetClip();
 
+   void Set_sound_die() {A.playSound(6);}
 
     void DoPlayer (Map& map_data);
     void checktomap(Map& map_data);
@@ -26,12 +26,13 @@ public:
 
    void settocdo(int x) {toc_do=x;}
    int gettocdo() {return toc_do;}
-   void set_sodan(int x) {so_dan=x;}
    void set_rasengan(int x) {so_rasengan=x;}
-   int get_damage_dan() {return damage_dan;}
+   void set_shuriken(int x) {so_shuriken=x;}
+
    int get_damage_rasengan() {return damage_rasengan;}
-   int get_sodan() {return so_dan;}
+   int get_damage_shuriken() {return damage_shuriken;}
    int get_sorasengan() {return so_rasengan;}
+   int get_soshuriken() {return so_shuriken;}
 
    void Camera(Map& map_data);
    void SetmapXY(const int x,const int y) {map_x=x;map_y=y;}
@@ -45,6 +46,14 @@ public:
    int Get_blood_main() {return blood_main;}
    //void ChecktoBullet(ThreatObject& p_threat);
 
+   bool ban_rasengan_() {return ban_rasengan;}
+   bool ban_shuriken_() {return ban_shuriken;}
+   bool is_move_() {return is_move;}
+   void set_ban_rasengan(bool t) {ban_rasengan=t;}
+   void set_ban_shuriken(bool t) {ban_shuriken=t;}
+   void set_is_move(bool t) {is_move=t;}
+   bool is_win_() {return is_win;}
+
 
    int GetDir() {return Dir;}
 private:
@@ -57,8 +66,7 @@ private:
      int Main_width;
      int Main_height;
 
-     Audio m_rasengan;
-     Audio m_dan;
+
      Input input_type;
      int frame_;//left
      int frame_1;//right
@@ -67,15 +75,23 @@ private:
      int frame_banphai;
      int status_;
 
+     Audio A;
      bool da_ban;
+     bool is_move;
      bool is_alive;
+     bool is_win;
+
     int Dir;
 
-    int damage_dan;
     int damage_rasengan;
+    int damage_shuriken;
 
-     int so_dan;
+    bool ban_shuriken;
+    bool ban_rasengan;
+
      int so_rasengan;
+     int so_shuriken;
+
      SDL_Rect clip_right[6];
      SDL_Rect clip_left[6];
      SDL_Rect clip_dungyen[6];

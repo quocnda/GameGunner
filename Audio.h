@@ -5,15 +5,14 @@ class Audio{
 public:
     Audio();
     ~Audio();
-    bool LoadMusic(std::string name);
-    bool LoadWav(std::string name_wav);
-    void playMusic();
-    void playWav();
-    void stopMusic() {;}
-    void stopWav() {;}
-    void free();
+   bool LoadMusicTotal(std::string name);
+   void PlayMusicTotal();
+   void SetUpMusicEvent();
+   void playSound(int id);
+
 private:
-     Mix_Chunk* wav;
-     Mix_Music* music;
+
+     Mix_Music* music_total;
+     Mix_Chunk* music_event[8];
 };
 #endif // AUDIO_H_

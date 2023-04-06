@@ -24,6 +24,7 @@ public:
     void LoadMap(char* name);
     void LoadTiles(SDL_Renderer* screen);
     void DrawMap(SDL_Renderer* screen);
+    void setGate(int i,int j) {game_map_.tile[i][j]=8;}
     Map getMap()const
     {
         return game_map_;

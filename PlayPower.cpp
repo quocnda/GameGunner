@@ -10,7 +10,7 @@ PlayPower::~PlayPower()
 }
 void PlayPower::Init(SDL_Renderer* screen)
 {
- LoadImg("Playpower.png",screen);
+ LoadImg("image/Playpower.png",screen);
  number=3;
  if(pos_list.size()>0) {
     pos_list.clear();

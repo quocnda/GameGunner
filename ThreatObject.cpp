@@ -247,10 +247,10 @@ bool ThreatObject::CheckToBullet(MainObject& p)
                 is_ban=true;
                 if(bullet[i]->get_type()==2)
                 {
-                    bi_ban=bi_ban-p.get_damage_rasengan();
+                    bi_ban=bi_ban-p.get_damage_shuriken();
                 }
                 else {
-                    bi_ban=bi_ban-p.get_damage_dan();
+                    bi_ban=bi_ban-p.get_damage_rasengan();
                 }
 
             bullet.erase(bullet.begin() + i);
@@ -263,22 +263,4 @@ bool ThreatObject::CheckToBullet(MainObject& p)
     }
     return is_ban;
 }
-
-/*void ThreatObject::RemoveBullet_threat(const int &idx)
-{
-
-        for(int i=0;i<p_amo_list.size();i++) {
-                if(idx<p_amo_list.size())
-                {
-                     Bullet* p_amo=p_amo_list.at(idx);
-        p_amo_list.erase(p_amo_list.begin()+idx);
-        if(p_amo!=NULL)
-        {
-            delete p_amo;
-            p_amo=NULL;
-        }
-                }
-
-    }
-}*/
 

@@ -43,6 +43,10 @@
 		<Unit filename="BulletThreat.h" />
 		<Unit filename="CommonFunc.cpp" />
 		<Unit filename="CommonFunc.h" />
+		<Unit filename="Gate.cpp" />
+		<Unit filename="Gate.h" />
+		<Unit filename="Introduction.cpp" />
+		<Unit filename="Introduction.h" />
 		<Unit filename="MainObject.cpp" />
 		<Unit filename="MainObject.h" />
 		<Unit filename="Map.cpp" />

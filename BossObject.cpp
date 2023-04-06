@@ -27,6 +27,7 @@ bool BossObject::LoadImg(std::string path,SDL_Renderer* screen)
          Boss_width=rect_.w/24+1;
          Boss_height=rect_.h-1;
     }
+    A.SetUpMusicEvent();
     //std::cout<<Main_width<<" "<<Main_height<<'\n';
     return ret;
 }
@@ -69,16 +70,12 @@ void BossObject::MakeBullet(Map& map_data,SDL_Renderer* screen)
     }
     if(count_bullet_col_wall>=15)
     {
+
         count_bullet_col_wall=0;
-        /*p_bullet_list=p_bullet_du_phong;
-        count_bullet_col_wall=0;*/
-        //std::cout<<count_bullet_col_wall<<'\n';
         for(int i=0;i<16;i++)
         {
             p_bullet_list[i]->set_col_wall();
-
             p_bullet_list[i]->set_is_move(true);
-            //p_bullet_list[i]->set_pos(x_pos,y_pos);
            if(i<8) { p_bullet_list[i]->set_pos(x_pos,y_pos);}
            else {p_bullet_list[i]->set_pos(x_pos-10,y_pos+10);}
         }
@@ -105,11 +102,7 @@ bool BossObject::CheckToBullet(MainObject& p)
         {
             std::cout<<i<<'\n';
            p.set_alive(false);
-           //std::cout<<"Main "<<subRect.x<<" "<<subRect.y<<" "<<subRect.w<<" "<<subRect.h<<'\n';
-           //std::cout<<"bullet "<<tmp_rect.x<<" "<<tmp_rect.y<<" "<<tmp_rect.w<<" "<<tmp_rect.h<<'\n';
             p_bullet_list.erase(p_bullet_list.begin()+i);
-            //p_bullet_list=p_bullet_du_phong;
-           //
         }
 
     }
@@ -119,10 +112,12 @@ bool BossObject::CheckToBullet(MainObject& p)
                 is_ban=true;
                 if(bullet[i]->get_type()==2)
                 {
-                    bi_ban=bi_ban-p.get_damage_rasengan();
+                    A.playSound(7);
+                    bi_ban=bi_ban-p.get_damage_shuriken();
                 }
                 else {
-                    bi_ban=bi_ban-p.get_damage_dan();
+                        A.playSound(7);
+                    bi_ban=bi_ban-p.get_damage_rasengan();
                 }
 
             bullet.erase(bullet.begin() + i);

@@ -6,14 +6,31 @@
 #include "BossObject.h"
 #include "TextObject.h"
 #include "PlayPower.h"
+#include "Audio.h"
+
 using namespace std;
 
 BaseObject gBackground;
 BaseObject dan;
 BaseObject rasengan;
+BaseObject threat;
+BaseObject boss;
+BaseObject Menu;
+BaseObject Win_even;
+BaseObject Lose_even;
+
+TextObject menu[3];
+
+TextObject introduction_;
+
 MainObject main_obj;
 GameMap game_map;
+Mix_Music* game_sound_total=NULL;
+Mix_Chunk* game_sound_rasengan=NULL;
+Mix_Music* win_game=NULL;
+
 TTF_Font* font_time=NULL;
+TTF_Font* font_game_menu=NULL;
 
 //ThreatObject p_threat;
 
@@ -29,6 +46,11 @@ bool init() {
    }
    font_time=TTF_OpenFont("VHANTIQ.ttf",15);
    if(font_time==NULL)
+   {
+       succes=false;
+   }
+   font_game_menu=TTF_OpenFont("STONB.ttf",40);
+   if(font_game_menu==NULL)
    {
        succes=false;
    }
@@ -49,8 +71,24 @@ bool init() {
 }
 bool loadmedia() {
    gBackground.LoadImg("nen_den.jpg",gScreen);
+   game_sound_total=Mix_LoadMUS("y2mate.mp3");
+   game_sound_rasengan=Mix_LoadWAV("Rasengan.wav");
+   win_game=Mix_LoadMUS("win_sound.mp3");
+   if(game_sound_total==NULL)
+   {
+       std::cout<<"game soung =null"<<'\n';
+   }
+   //Menu.LoadImg("menu.png",gScreen);
+   return game_sound_total!=NULL;
 }
 void close() {
+    Mix_FreeMusic(game_sound_total);
+    game_sound_total=NULL;
+    Mix_FreeChunk(game_sound_rasengan);
+    game_sound_rasengan=NULL;
+    Mix_FreeMusic(win_game);
+    win_game=NULL;
+
    SDL_DestroyRenderer(gScreen);
    gScreen=NULL;
    SDL_DestroyWindow(gWindow);
@@ -58,40 +96,141 @@ void close() {
    SDL_DestroyTexture(gText);
    gText=NULL;
 }
+
+
+
 int main(int argc,char* args[])
 {
 
+   SetPosMenu();
+   int quit1=0;
+
+    string introduction="Introduction";
+    string Exit="Exit";
+    string play="Play";
+    if(init())
+    {
+        if(loadmedia())
+        {
+             bool t=Menu.LoadImg("image/menu.png",gScreen);
+    if(!t)
+    {
+        std::cout<<"loi load anh"<<'\n';
+    }
+
+            menu[0].SetText(play);
+            menu[0].LoadFromRenderText(font_game_menu,gScreen);
+
+            menu[1].SetText(Exit);
+            menu[1].LoadFromRenderText(font_game_menu,gScreen);
+
+            menu[2].SetText(introduction);
+            menu[2].LoadFromRenderText(font_game_menu,gScreen);
+
+
+
+        while(quit1==0)
+            {
+
+                while (SDL_PollEvent(&gevent) != 0) {
+                int xm = gevent.motion.x;
+                int ym = gevent.motion.y;
+                if (gevent.type == SDL_QUIT) {
+                    quit1 = 4;
+                }
+                if (gevent.type == SDL_MOUSEMOTION) {
+
+                    for (int i = 0; i < 3; i++) {
+                          menu_pos[i].w=menu[i].GetWidth();
+                          menu_pos[i].h=menu[i].GetHeight();
+                        if (check_mouse(xm, ym, menu_pos[i])) {
+
+                            menu[i].Free();
+                            menu[i].SetColor(TextObject::RED_TEXT);
+                            menu[i].LoadFromRenderText(font_game_menu,gScreen);
+                        }
+                        else {
+                                menu[i].Free();
+                            menu[i].SetColor(TextObject::WHITE_TEXT);
+                            menu[i].LoadFromRenderText(font_game_menu,gScreen);
+                        }
+                    }
+                }
+                if (gevent.type = SDL_MOUSEBUTTONDOWN) {
+                    for (int i = 0; i < 3; i++) {
+                        if (check_mouse(xm, ym, menu_pos[i]) && gevent.button.button == SDL_BUTTON_LEFT) {
+                            quit1 = i + 1;
+                            std::cout<<quit1<<'\n';
+                        }
+                    }
+                }
+            }
+            Menu.Render(gScreen);
+            menu[0].RenderText(gScreen,menu_pos[0].x,menu_pos[0].y);
+            menu[1].RenderText(gScreen,menu_pos[1].x,menu_pos[1].y);
+            menu[2].RenderText(gScreen,menu_pos[2].x,menu_pos[2].y);
+            SDL_RenderPresent(gScreen);
+        }
+
+            }
+        }
+
+    if(quit1==1)
+    {
+        int cnt_threat=0;
+        int cnt_boss=0;
+        std::string cnt_b="";
+        std::string cnt_th="";
     int cnt_dan=0;
     int cnt_rasengan=0;
     std::string val_cnt_dan;
-    std::string strDan="     : ";
+    std::string strDan="  : ";
     std::string val_cnt_rasengan;
-    std::string strRasengan="      : ";
+    std::string strRasengan=" : ";
     std::string str_time="Time: ";
     std::string str_val;
 
 
+
     int num_threat=25;
-    int num_boss=3;
     int num_die=0;
     if(init()) {
         if(loadmedia())
         {
-            main_obj.LoadImg("naruto_main.png",gScreen);
+            bool is_win=false;
+            Mix_PlayMusic(game_sound_total,4);
+            //Mix_VolumeMusic(50);
+
+
+
+            main_obj.LoadImg("image/naruto_main.png",gScreen);
             main_obj.SetClip();
             main_obj.settocdo(2);
 
-            dan.LoadImg("laser_.png",gScreen);
-            rasengan.LoadImg("sphere_.png",gScreen);
-            dan.SetRect(337,15);
-            rasengan.SetRect(270,15);
+            Win_even.LoadImg("image/you_win.png",gScreen);
+            Win_even.SetRect(100,100);
+
+            dan.LoadImg("image/laser_.png",gScreen);
+            rasengan.LoadImg("image/sphere_.png",gScreen);
+            threat.LoadImg("image/cntthreat.png",gScreen);
+            boss.LoadImg("image/boss_pr.png",gScreen);
+
+            dan.SetRect(SCREEN_WIDTH*0.3,15);
+            rasengan.SetRect(SCREEN_WIDTH*0.5,15);
+            threat.SetRect(SCREEN_WIDTH*0.6,15);
+            boss.SetRect(SCREEN_WIDTH*0.7,15);
+
+            Uint32 time_val;
+            Uint32 val_time;
+
+            Map map_data;
 
 
             std::vector<BossObject*> p_boss_ob;
             for(int i=0;i<3;i++)
             {
              BossObject* p_boss=new BossObject();
-             p_boss->LoadImg("Boss.png",gScreen);
+             p_boss->LoadImg("image/Boss.png",gScreen);
              p_boss->SetClip();
              if(i==0) {p_boss->Set_pos(BOSS_POS_X,BOSS_POS_Y);}
              else if(i==1) {p_boss->Set_pos(BOSS_POS_X_1,BOSS_POS_Y_1);}
@@ -106,7 +245,7 @@ int main(int argc,char* args[])
                 std::vector<Bullet*> p_bullet_boss;
             for(int i=0;i<16;i++) {
                 Bullet* p_bullet_boss_=new Bullet();
-               bool check= p_bullet_boss_->LoadImg("Threat_bullet.png",gScreen);
+               bool check= p_bullet_boss_->LoadImg("image/Threat_bullet.png",gScreen);
                 if(!check) {
                     std::cout<<"loi load bom"<<'\n';
                 }
@@ -136,7 +275,7 @@ int main(int argc,char* args[])
              for(int i=0;i<NUM_THREAT;i++) {
                 ThreatObject* p_threat_=new ThreatObject();
 
-                p_threat_->LoadImg("Threat1.png",gScreen);
+                p_threat_->LoadImg("image/Threat1.png",gScreen);
 
                 p_threat_->SetClip();
                 p_threat.push_back(p_threat_);
@@ -146,32 +285,26 @@ int main(int argc,char* args[])
              for(int i=0;i<5;i++) {
                 p_threat[i]->set_x_pos(1664);
                 p_threat[i]->set_y_pos(832);
-               /* Bullet* p_amo=new Bullet();
-                 p_threat[i]->InitBullet(p_amo,gScreen);
-             */
              }
              for(int i=5;i<10;i++) {
                 p_threat[i]->set_x_pos(768);
                 p_threat[i]->set_y_pos(1344);
-                /*Bullet* p_amo=new Bullet();
-                p_threat[i]->InitBullet(p_amo,gScreen);
-             */
              }
              for(int i=10;i<15;i++) {
                 p_threat[i]->set_x_pos(1216);
                 p_threat[i]->set_y_pos(448);
-                /*Bullet* p_amo=new Bullet();
-                p_threat[i]->InitBullet(p_amo,gScreen);*/
              }
 
             game_map.LoadMap("map.txt");
+
             game_map.LoadTiles(gScreen);
-           Map mapX=game_map.getMap();
+         //  Map mapX=game_map.getMap();
+
+             std::cout<<1<<'\n';
 
            PlayPower play_power;
            play_power.Init(gScreen);
 
-            //game_map.xuatMap();
 
             TextObject time_game;
             time_game.SetColor(TextObject::WHITE_TEXT);
@@ -181,12 +314,16 @@ int main(int argc,char* args[])
             TextObject so_rasengan;
             so_rasengan.SetColor(TextObject::RED_TEXT);
 
+            TextObject so_threat;
+            so_threat.SetColor(TextObject::WHITE_TEXT);
+            TextObject so_boss;
+            so_boss.SetColor(TextObject::WHITE_TEXT);
+
             bool quit=false;
-            bool is_win=false;
+            bool is_win_=false;
             while(!quit&&!is_win)
             {
 
-                //createGhost++;
                 while(SDL_PollEvent(&gevent)!=0)
                 {
                     if(gevent.type==SDL_QUIT)
@@ -194,38 +331,25 @@ int main(int argc,char* args[])
                         quit=true;
                     }
                   main_obj.handle(gevent,gScreen);
-                }
 
+                }
+                 time_val=SDL_GetTicks()/1000;
+                  val_time=301-time_val;
                 gBackground.Render(gScreen);
 
-                Map map_data=game_map.getMap();
-                //const Map map_data1=game_map.getMap();
-               // std::cout<<map_data.max_x_<<" "<<map_data.max_y_<<'\n';
+
+                map_data=game_map.getMap();
                 main_obj.SetmapXY(map_data.start_x_,map_data.start_y_);
-                /*for(int i=0;i<NUM_THREAT;i++) {
-                    p_threat[i]->SetMapXY(map_data.start_x_,map_data.start_y_);
-                }*/
-                //p_threat.SetMapXY(map_data.start_x_,map_data.start_y_);
                 main_obj.DoPlayer(map_data);
-               //p_boss.SetMapXY(map_data.start_x_,map_data.start_y_);
+
 
                 game_map.SetMap(map_data);
                  game_map.DrawMap(gScreen);
                  play_power.Show(gScreen);
 
                  main_obj.Show(gScreen);
-
-
-
                  main_obj.HandleBullet(gScreen,map_data);
 
-                 /* p_threat[20]->SetMapXY(map_data.start_x_,map_data.start_y_);
-                    p_threat[20]->DoPlayer(map_data);
-                    //p_threat[20]->MakeBullet(gScreen,SCREEN_WIDTH,SCREEN_HEIGHT);
-                    p_threat[20]->Show(gScreen);
-                  bool check=p_threat[20]->CheckToBullet(main_obj);
-
-                  */
                   for(int i=0;i<p_boss_ob.size();i++)
                 {
 
@@ -233,7 +357,6 @@ int main(int argc,char* args[])
                     p_boss_ob[i]->Show(gScreen);
                     p_boss_ob[i]->MakeBullet(map_data,gScreen);
                     p_boss_ob[i]->CheckToBullet(main_obj);
-                    //if(!main_obj.get_a_live()) {p_boss_ob[i]->Reset_amo_list();}
                 }
                 for(int i=0;i<p_boss_ob.size();i++)
                 {
@@ -255,26 +378,53 @@ int main(int argc,char* args[])
                 }
         for(int i = 0; i < p_threat.size(); i++){
             if(!p_threat[i]->is_alive()){
+
                     std::cout<<"da chet"<<'\n';
                  p_threat.erase(p_threat.begin() + i);
             }
         }
-        if(p_threat.size()==0&&p_boss_ob.size()==0) {
-            std::cout<<"da win";
-            p_threat.clear();
+        if(p_threat.size()<=20&&p_boss_ob.size()<=2) {
+            //std::cout<<"da win";
+            game_map.setGate(7,1);
+            if(main_obj.is_win_())
+            {
+                p_threat.clear();
             p_boss_ob.clear();
-            is_win=true;
+            Mix_PausedMusic();
+            Mix_PlayMusic(win_game,0);
+            Win_even.Render(gScreen);
+            is_win_=true;
+
+            //is_win=true;
+            }
+
+
         }
         if(!main_obj.get_a_live())
         {
+            main_obj.Set_sound_die();
             num_die++;
 
-            if(num_die<=3) {
+            if(num_die<3) {
                 play_power.Decrease();
                 play_power.Show(gScreen);
-            }
-            main_obj.set_alive(true);
+                main_obj.set_alive(true);
             std::cout<<"da hoi sinh"<<'\n';
+            }
+            /*else if(num_die>=3)
+            {
+                for(int i=0;i<p_threat.size();i++)
+                {
+                    p_threat[i]->free();
+                }
+                for(int i=0;i<p_boss_ob.size();i++)
+                {
+                    p_boss_ob[i]->free();
+                }
+                p_threat.clear();
+                p_boss_ob.clear();
+                quit=true;
+            }*/
         }
         if(main_obj.Get_blood_main()!=0)
         {
@@ -284,15 +434,15 @@ int main(int argc,char* args[])
             main_obj.Set_blood_main(0);
         }
 
-        cnt_dan=main_obj.get_sodan();
-        cnt_rasengan=main_obj.get_sorasengan();
+        cnt_dan=main_obj.get_sorasengan();
+        cnt_rasengan=main_obj.get_soshuriken();
           val_cnt_dan=std::to_string(cnt_dan);
 
          strDan+=val_cnt_dan;
           so_dan.SetText(strDan);
           so_dan.LoadFromRenderText(font_time,gScreen);
           dan.Render(gScreen);
-         so_dan.RenderText(gScreen,SCREEN_WIDTH*0.6-50,20);
+         so_dan.RenderText(gScreen,SCREEN_WIDTH*0.3+32,20);
          //val_cnt_dan="";
          so_dan.Free();
          strDan="";
@@ -303,15 +453,31 @@ int main(int argc,char* args[])
 
          rasengan.Render(gScreen);
          so_rasengan.LoadFromRenderText(font_time,gScreen);
-         so_rasengan.RenderText(gScreen,SCREEN_WIDTH*0.5-50,20);
+         so_rasengan.RenderText(gScreen,SCREEN_WIDTH*0.5+32,20);
          val_cnt_rasengan="";
          strRasengan="";
          so_rasengan.Free();
-        //std::cout<<main_obj.Get_blood_main()<<'\n';
-                 SDL_Delay(10);
 
-                 Uint32 time_val=SDL_GetTicks()/1000;
-                 Uint32 val_time=300-time_val;
+         threat.Render(gScreen);
+         boss.Render(gScreen);
+         cnt_boss=p_boss_ob.size();
+         cnt_threat=p_threat.size();
+
+         cnt_b=std::to_string(cnt_boss);
+         so_boss.SetText(cnt_b);
+         so_boss.LoadFromRenderText(font_time,gScreen);
+         so_boss.RenderText(gScreen,SCREEN_WIDTH*0.7+32,20);
+         so_boss.Free();
+
+         cnt_th=std::to_string(cnt_threat);
+         so_threat.SetText(cnt_th);
+         so_threat.LoadFromRenderText(font_time,gScreen);
+         so_threat.RenderText(gScreen,SCREEN_WIDTH*0.6+32,20);
+         so_threat.Free();
+        //std::cout<<main_obj.Get_blood_main()<<'\n';
+                 SDL_Delay(3);
+
+
                  if(val_time<=0)
                  {
                  std::cout<<"het time";
@@ -333,6 +499,26 @@ int main(int argc,char* args[])
         else {cout<<"loi day ne";}
     }
     else {cout<<"losi day";}
-    close();
+
+    }
+    else if(quit1==2)
+    {
+        close();
     return 0;
+    }
+    else if(quit1==3)
+    {
+        SDL_RenderClear(gScreen);
+        Menu.LoadImg("image/menu.png",gScreen);
+        while(SDL_PollEvent(&gevent)!=0)
+        {
+
+        }
+
+      //introduction_.xuat_char();
+    }
+
+
+
+
 }

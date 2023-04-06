@@ -5,7 +5,7 @@
 1679123235 d:\c++\thuram\baseobject.h
 	"CommonFunc.h"
 
-1680334390 d:\c++\thuram\commonfunc.h
+1680590829 d:\c++\thuram\commonfunc.h
 	<SDL_image.h>
 	<SDL.h>
 	<SDL_ttf.h>
@@ -14,6 +14,7 @@
 	<vector>
 	<ostream>
 	<cstdlib>
+	<stdlib.h>
 	<ctime>
 	<SDL_ttf.h>
 	<SDL_mixer.h>
@@ -21,16 +22,16 @@
 1679117669 source:d:\c++\thuram\commonfunc.cpp
 	"CommonFunc.h"
 
-1680367244 source:d:\c++\thuram\mainobject.cpp
+1680591699 source:d:\c++\thuram\mainobject.cpp
 	"MainObject.h"
 
-1680336546 d:\c++\thuram\mainobject.h
+1680588482 d:\c++\thuram\mainobject.h
 	"CommonFunc.h"
 	"BaseObject.h"
 	"BulletObject.h"
 	"Audio.h"
 
-1680368763 source:d:\c++\thuram\main.cpp
+1680592396 source:d:\c++\thuram\main.cpp
 	"CommonFunc.h"
 	"BaseObject.h"
 	"MainObject.h"
@@ -39,25 +40,26 @@
 	"BossObject.h"
 	"TextObject.h"
 	"PlayPower.h"
+	"Audio.h"
 
-1680313213 source:d:\c++\thuram\map.cpp
+1680591565 source:d:\c++\thuram\map.cpp
 	"Map.h"
 
-1680313213 d:\c++\thuram\map.h
+1680420178 d:\c++\thuram\map.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1680187403 source:d:\c++\thuram\bulletobject.cpp
+1680417170 source:d:\c++\thuram\bulletobject.cpp
 	"BulletObject.h"
 
 1680187403 d:\c++\thuram\bulletobject.h
 	"BaseObject.h"
 	"Map.h"
 
-1680312740 source:d:\c++\thuram\threatobject.cpp
+1680417555 source:d:\c++\thuram\threatobject.cpp
 	"ThreatObject.h"
 
-1680188931 d:\c++\thuram\threatobject.h
+1680541489 d:\c++\thuram\threatobject.h
 	"CommonFunc.h"
 	"BaseObject.h"
 	"MainObject.h"
@@ -71,32 +73,37 @@
 1679731916 source:d:\c++\thuram\bulletthreat.cpp
 	"BulletThreat.h"
 
-1680311615 source:d:\c++\thuram\bossobject.cpp
+1680417974 source:d:\c++\thuram\bossobject.cpp
 	"BossObject.h"
 
-1680310459 d:\c++\thuram\bossobject.h
+1680417800 d:\c++\thuram\bossobject.h
 	"BaseObject.h"
 	"CommonFunc.h"
 	"BulletObject.h"
 	"Map.h"
 	"MainObject.h"
 
-1680195726 source:d:\c++\thuram\textobject.cpp
+1680580886 source:d:\c++\thuram\textobject.cpp
 	"TextObject.h"
 
-1680369465 d:\c++\thuram\textobject.h
+1680580886 d:\c++\thuram\textobject.h
 	"CommonFunc.h"
+	"BaseObject.h"
 
-1680197660 source:d:\c++\thuram\playpower.cpp
+1680592505 source:d:\c++\thuram\playpower.cpp
 	"PlayPower.h"
 
 1680197952 d:\c++\thuram\playpower.h
 	"CommonFunc.h"
 	"BaseObject.h"
 
-1680337465 source:d:\c++\thuram\audio.cpp
+1680417974 source:d:\c++\thuram\audio.cpp
 	"Audio.h"
 
-1680337465 d:\c++\thuram\audio.h
+1680417974 d:\c++\thuram\audio.h
 	"CommonFunc.h"
+
+1680418480 source:d:\c++\thuram\gate.cpp
+
+1680542440 source:d:\c++\thuram\introduction.cpp
 
