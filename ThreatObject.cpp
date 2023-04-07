@@ -229,14 +229,13 @@ bool ThreatObject::CheckToBullet(MainObject& p)
     bool is_ban=false;
     std::vector<Bullet*> bullet = p.Getamo();
     SDL_Rect mainRect = this->rect_;
-    mainRect.w=mainRect.w/5-21;
+    mainRect.w=mainRect.w/5;
 
-    mainRect.h=mainRect.h/2-2;
+    mainRect.h=mainRect.h/2;
     SDL_Rect subRect = p.GetRect();
     subRect.w=subRect.w/6;
-    subRect.x+=4;
+   // subRect.x+=4;
     subRect.h=subRect.h/5;
-    subRect.y=subRect.y+5;
     if(checkCollision(mainRect, subRect))  {
     p.set_alive(false);
     is_alive_=false;

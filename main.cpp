@@ -18,6 +18,9 @@ BaseObject boss;
 BaseObject Menu;
 BaseObject Win_even;
 BaseObject Lose_even;
+BaseObject back_menu;
+BaseObject play_;
+BaseObject pause_;
 
 TextObject menu[3];
 
@@ -44,12 +47,12 @@ bool init() {
    if(gScreen==NULL) {
     succes=false;
    }
-   font_time=TTF_OpenFont("VHANTIQ.ttf",15);
+   font_time=TTF_OpenFont("font/VHANTIQ.ttf",15);
    if(font_time==NULL)
    {
        succes=false;
    }
-   font_game_menu=TTF_OpenFont("STONB.ttf",40);
+   font_game_menu=TTF_OpenFont("font/STONB.ttf",40);
    if(font_game_menu==NULL)
    {
        succes=false;
@@ -71,9 +74,18 @@ bool init() {
 }
 bool loadmedia() {
    gBackground.LoadImg("nen_den.jpg",gScreen);
-   game_sound_total=Mix_LoadMUS("y2mate.mp3");
-   game_sound_rasengan=Mix_LoadWAV("Rasengan.wav");
-   win_game=Mix_LoadMUS("win_sound.mp3");
+   game_sound_total=Mix_LoadMUS("sound/y2mate_music.mp3");
+   game_sound_rasengan=Mix_LoadWAV("sound/Rasengan.wav");
+   win_game=Mix_LoadMUS("sound/win_sound.mp3");
+   if(win_game==NULL)
+   {
+       std::cout<<"loi load wingame"<<'\n';
+   }
+  play_.LoadImg("image/play.jpg",gScreen);
+
+   pause_.LoadImg("image/pause.jpg",gScreen);
+   play_.SetRect(0,600);
+   pause_.SetRect(0,600);
    if(game_sound_total==NULL)
    {
        std::cout<<"game soung =null"<<'\n';
@@ -102,21 +114,22 @@ void close() {
 int main(int argc,char* args[])
 {
 
+init();
+loadmedia();
    SetPosMenu();
    int quit1=0;
-
-    string introduction="Introduction";
-    string Exit="Exit";
-    string play="Play";
-    if(init())
-    {
-        if(loadmedia())
-        {
-             bool t=Menu.LoadImg("image/menu.png",gScreen);
+   back_menu.LoadImg("image/back.png",gScreen);
+               back_menu.SetRect(10,10);
+                     bool t=Menu.LoadImg("image/menu.png",gScreen);
     if(!t)
     {
         std::cout<<"loi load anh"<<'\n';
     }
+
+   label:
+    string introduction="Introduction";
+    string Exit="Exit";
+    string play="Play";
 
             menu[0].SetText(play);
             menu[0].LoadFromRenderText(font_game_menu,gScreen);
@@ -127,10 +140,11 @@ int main(int argc,char* args[])
             menu[2].SetText(introduction);
             menu[2].LoadFromRenderText(font_game_menu,gScreen);
 
-
+    int time_console;
 
         while(quit1==0)
             {
+                time_console=SDL_GetTicks()/1000;
 
                 while (SDL_PollEvent(&gevent) != 0) {
                 int xm = gevent.motion.x;
@@ -156,7 +170,8 @@ int main(int argc,char* args[])
                         }
                     }
                 }
-                if (gevent.type = SDL_MOUSEBUTTONDOWN) {
+                if (gevent.type == SDL_MOUSEBUTTONDOWN) {
+                        std::cout<<"da vao day"<<'\n';
                     for (int i = 0; i < 3; i++) {
                         if (check_mouse(xm, ym, menu_pos[i]) && gevent.button.button == SDL_BUTTON_LEFT) {
                             quit1 = i + 1;
@@ -172,11 +187,14 @@ int main(int argc,char* args[])
             SDL_RenderPresent(gScreen);
         }
 
-            }
-        }
+
 
     if(quit1==1)
     {
+        bool mouse_event=false;
+        int pause=0;
+        int play_ing=1;
+        SDL_RenderClear(gScreen);
         int cnt_threat=0;
         int cnt_boss=0;
         std::string cnt_b="";
@@ -194,9 +212,7 @@ int main(int argc,char* args[])
 
     int num_threat=25;
     int num_die=0;
-    if(init()) {
-        if(loadmedia())
-        {
+
             bool is_win=false;
             Mix_PlayMusic(game_sound_total,4);
             //Mix_VolumeMusic(50);
@@ -295,15 +311,16 @@ int main(int argc,char* args[])
                 p_threat[i]->set_y_pos(448);
              }
 
+
             game_map.LoadMap("map.txt");
 
             game_map.LoadTiles(gScreen);
          //  Map mapX=game_map.getMap();
 
-             std::cout<<1<<'\n';
 
            PlayPower play_power;
            play_power.Init(gScreen);
+
 
 
             TextObject time_game;
@@ -324,17 +341,54 @@ int main(int argc,char* args[])
             while(!quit&&!is_win)
             {
 
+
+
+                if (pause == 0) {
+                play_.Render(gScreen);
+            }
+            if (pause == 1) {
+                pause_.Render(gScreen);
+            }
+                 while (pause == 1) {
+                        SDL_RenderPresent(gScreen);
+                while (SDL_PollEvent(&gevent) != 0) {
+                    int xm = gevent.motion.x;
+                    int ym = gevent.motion.y;
+                    if (gevent.type == SDL_MOUSEBUTTONDOWN) {
+                           mouse_event=false;
+                        if (gevent.button.button == SDL_BUTTON_LEFT && check_mouse(xm, ym, pause_.GetRect()) ) {
+                            std::cout<<"da vao day 1"<<'\n';
+                            pause = 0;
+                        }
+                    }
+                }
+            }
                 while(SDL_PollEvent(&gevent)!=0)
                 {
                     if(gevent.type==SDL_QUIT)
                     {
                         quit=true;
                     }
-                  main_obj.handle(gevent,gScreen);
+
+                   if (gevent.type == SDL_MOUSEBUTTONDOWN) {
+                            int xm = gevent.motion.x;
+                    int ym = gevent.motion.y;
+                        if (gevent.button.button == SDL_BUTTON_LEFT && check_mouse(xm, ym, play_.GetRect()) ) {
+                            std::cout<<"da vao day 2"<<'\n';
+                            pause = 1;
+                            mouse_event=true;
+                            pause_.Render(gScreen);
+                            SDL_RenderPresent(gScreen);
+                        }
+                    }
+                    if(!mouse_event) {main_obj.handle(gevent,gScreen);}
 
                 }
-                 time_val=SDL_GetTicks()/1000;
-                  val_time=301-time_val;
+
+
+
+                 time_val=SDL_GetTicks()/1000-time_console;
+                  val_time=300-time_val;
                 gBackground.Render(gScreen);
 
 
@@ -390,12 +444,15 @@ int main(int argc,char* args[])
             {
                 p_threat.clear();
             p_boss_ob.clear();
-            Mix_PausedMusic();
-            Mix_PlayMusic(win_game,0);
+            if(Mix_PlayingMusic()==1)
+            {
+                Mix_HaltMusic();
+            Mix_PlayMusic(win_game,2);
+
             Win_even.Render(gScreen);
             is_win_=true;
+            }
 
-            //is_win=true;
             }
 
 
@@ -433,6 +490,12 @@ int main(int argc,char* args[])
             play_power.Show(gScreen);
             main_obj.Set_blood_main(0);
         }
+
+        if(play_ing==1) {play_.Render(gScreen);}
+
+
+
+
 
         cnt_dan=main_obj.get_sorasengan();
         cnt_rasengan=main_obj.get_soshuriken();
@@ -495,10 +558,7 @@ int main(int argc,char* args[])
                  }
                   SDL_RenderPresent(gScreen);
             }
-        }
-        else {cout<<"loi day ne";}
-    }
-    else {cout<<"losi day";}
+
 
     }
     else if(quit1==2)
@@ -508,15 +568,35 @@ int main(int argc,char* args[])
     }
     else if(quit1==3)
     {
-        SDL_RenderClear(gScreen);
-        Menu.LoadImg("image/menu.png",gScreen);
-        while(SDL_PollEvent(&gevent)!=0)
-        {
 
+        Menu.SetRect(0,0);
+        Menu.Render(gScreen);
+        back_menu.Render(gScreen);
+        while(quit1==3)
+        {
+            while(SDL_PollEvent(&gevent)!=0)
+            {
+                int xm = gevent.motion.x;
+                int ym = gevent.motion.y;
+                if(gevent.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    std::cout<<"da vao day"<<'\n';
+                    if (check_mouse(xm, ym, back_menu.GetRect()) && gevent.button.button == SDL_BUTTON_LEFT) {
+                            quit1 = 0;
+                            goto label;
+                            std::cout<<quit1<<'\n';
+                        }
+                }
+
+            }
+          SDL_RenderPresent(gScreen);
         }
+    }
+
+
 
       //introduction_.xuat_char();
-    }
+
 
 
 
