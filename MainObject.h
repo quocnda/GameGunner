@@ -44,7 +44,7 @@ public:
 
    void Set_blood_main(int x) {blood_main=x;}
    int Get_blood_main() {return blood_main;}
-   //void ChecktoBullet(ThreatObject& p_threat);
+
 
    bool ban_rasengan_() {return ban_rasengan;}
    bool ban_shuriken_() {return ban_shuriken;}

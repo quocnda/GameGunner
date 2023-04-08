@@ -28,7 +28,6 @@ bool BossObject::LoadImg(std::string path,SDL_Renderer* screen)
          Boss_height=rect_.h-1;
     }
     A.SetUpMusicEvent();
-    //std::cout<<Main_width<<" "<<Main_height<<'\n';
     return ret;
 }
 void BossObject::SetClip()
@@ -54,13 +53,7 @@ void BossObject::Show(SDL_Renderer* screen)
 }
 void BossObject::MakeBullet(Map& map_data,SDL_Renderer* screen)
 {
-
-     if(p_bullet_list.size()<=14) {
-        p_bullet_list=p_bullet_du_phong;
-     }
-
     for(int i=0;i<p_bullet_list.size();i++) {
-           // std::cout<<p_bullet_list[i]->toa_do_x()<<" "<<p_bullet_list[i]->toa_do_y()<<'\n';
         p_bullet_list[i]->HandleMove(SCREEN_WIDTH-10,SCREEN_HEIGHT-10,map_data,map_x,map_y);
         if(p_bullet_list[i]->get_col_wall()!=0)
         {
@@ -94,7 +87,6 @@ bool BossObject::CheckToBullet(MainObject& p)
     subRect.x+=4;
     subRect.h=subRect.h/5;
     subRect.y=subRect.y+5;
-   //std::cout<<p_bullet_list.size()<<'\n';
     for(int i=0;i<p_bullet_list.size();i++)
     {
         SDL_Rect tmp_rect=p_bullet_list[i]->GetRect();

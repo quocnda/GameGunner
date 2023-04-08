@@ -506,7 +506,6 @@ void MainObject::checktomap(Map & map_data) {
         if(val_1==4||val_2==4)
             {
                  A.playSound(5);
-                std::cout<<"da vao day"<<'\n';
             map_data.tile[y1][x1]=1;
             map_data.tile[y1][x2]=1;
            }
@@ -589,7 +588,6 @@ void MainObject::HandleBullet(SDL_Renderer* screen,Map& map_data)
             }
             else
             {
-                //std::cout << p_bullet_list_.size() << std::endl;
                p_amo_list.erase(p_amo_list.begin() + i);
 
             }

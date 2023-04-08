@@ -99,21 +99,6 @@ void GameMap::DrawMap(SDL_Renderer* screen)
     }
 
 }
-void GameMap::xuatMap()
-{
-    for(int i=0;i<game_map_.max_y_;i++)
-    {
-        for(int j=0;j<game_map_.max_x_;j++)
-        {
-            std::cout<<game_map_.tile[i][j]<<" ";
-           if(game_map_.tile[i][j]==7) {
 
-            std::cout<<i<<" "<<j<<'\n';
-           }
-        }
-
-        std::cout<<'\n';
-    }
-}
 
 

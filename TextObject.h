@@ -27,9 +27,9 @@ public:
     void SetText(const std::string & text) {str_val_=text;}
     std::string GetText() {return str_val_;}
 
-    bool  LoadText(char* name);
 
-    void xuat_char();
+
+
 
 private:
     std::string str_val_;
@@ -38,6 +38,6 @@ private:
     int width;
     int height;
 
-    char introduction[2][8];
+
 };
 #endif // TEXT_OBJECT_H_

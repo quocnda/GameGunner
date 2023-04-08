@@ -29,7 +29,6 @@ public:
     {
         return game_map_;
     };
-    void xuatMap();
     void SetMap(Map& map_data) {game_map_=map_data;};
 
 private:

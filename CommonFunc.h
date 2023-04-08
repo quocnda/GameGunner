@@ -48,6 +48,8 @@ const int TILE_SIZE=64;
 #define BOSS_POS_X_2 1728
 #define BOSS_POS_Y_2 1536
 
+#define NUM_BOSS_DIE 0
+#define NUM_THREAT_DIE 0
 
 typedef struct Map
 {

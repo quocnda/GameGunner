@@ -14,5 +14,6 @@ private:
 
      Mix_Music* music_total;
      Mix_Chunk* music_event[8];
+
 };
 #endif // AUDIO_H_

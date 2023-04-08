@@ -26,16 +26,13 @@ public:
        LASER=1,
        SPHERE=2
     };
-    void handlemoveright(const int x_border,const int y_border);
-    void moveleft(const int x_border,const int y_border,int m_x,int m_y);
-
 
     int get_type() {return amo_type_;}
     void set_type(int type) {amo_type_=type;}
     bool get_is_move() {return is_move_;}
     void set_is_move(bool is_move) {is_move_=is_move;}
     void setwh(const int &width,const int &height) {rect_.w=width;rect_.h=height;}
-    void handlemoverighttoleft();
+
     void set_val_bullet(const int & val) {x_val=val;}
     void set_val_bullet_y(const int v) {y_val=v;}
     void SetDir(int x) {Dir=x;}

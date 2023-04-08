@@ -18,36 +18,6 @@ Bullet::Bullet()
     map_y=0;
 }
 
-void Bullet::handlemoveright(const int x_border,const int y_border) {
-    x_pos+=5;
-    rect_.x=x_pos;
-    if(rect_.x>x_border) {
-        is_move_=false;
-    }
-}
-void Bullet::moveleft(const int x_border,const int y_border,int m_x,int m_y)
-{
-    //std:cout<<rect_.x<<" "<<rect_.y<<'\n';
-    x_pos-=6;
-
-   // rect_.y-=m_y;
-     //std::cout<<rect_.x<<" "<<rect_.y<<'\n';
-    if(rect_.x<=0) {
-           std::cout<<"am"<<'\n';
-        is_move_=false;
-    }
-}
-
-void Bullet::handlemoverighttoleft()
-{
-    x_pos+=5;
-    rect_.x=x_pos;
-    if(rect_.x<0)
-    {
-        is_move_=false;
-
-    }
-}
 
 void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data,int x,int y)
 {
@@ -130,12 +100,10 @@ void Bullet::HandleMove(const int& x_border, const int& y_border, Map& map_data,
 
 void Bullet::Show(SDL_Renderer* des, int x, int y)
 {
-    //std::cout<<rect_.x<<" "<<rect_.y<<" "<<rect_.w<<" "<<rect_.h<<'\n';
+
     rect_.x = x_pos - x;
     rect_.y = y_pos - y;
-    //std::cout<<rect_.x<<" "<<rect_.y<<'\n';
-    //std::cout<<rect_.x<<" "<<rect_.y<<'\n';
-   // std::cout<<rect_.x<<" "<<rect_.y<<'\n';
+
     SDL_Rect renderQuad = {rect_.x, rect_.y, rect_.w, rect_.h};
 
     SDL_RenderCopy(des, p_object_, NULL, &renderQuad);
@@ -160,7 +128,7 @@ void Bullet::Checktomap(Map& map_data)
     y2 = (y_pos + height_min - 1) / TILE_SIZE;
 
     if(x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y){
-        if(x_val > 0)   //main object dang di chuyen ve ben phai
+        if(x_val > 0)
         {
             int val1 = map_data.tile[y1][x2];
             int val2 = map_data.tile[y2][x2];
@@ -168,7 +136,7 @@ void Bullet::Checktomap(Map& map_data)
                 is_move_=false;
             }
         }
-        else if(x_val < 0)   //main object dang di chuyen ve ben phai
+        else if(x_val < 0)
         {
             int val1 = map_data.tile[y1][x1];
             int val2 = map_data.tile[y2][x1];
@@ -187,7 +155,7 @@ void Bullet::Checktomap(Map& map_data)
     y2 = (y_pos + y_val + FRAME - 1) / TILE_SIZE;
 
     if(x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y){
-        if(y_val > 0)   //main object dang di chuyen ve xuong
+        if(y_val > 0)
         {
             int val1 = map_data.tile[y2][x1];
             int val2 = map_data.tile[y2][x2];
@@ -195,7 +163,7 @@ void Bullet::Checktomap(Map& map_data)
                    is_move_=false;
             }
         }
-        else if(y_val < 0)   //main object dang di chuyen ve ben phai
+        else if(y_val < 0)
         {
             int val1 = map_data.tile[y1][x1];
             int val2 = map_data.tile[y1][x2];
@@ -216,8 +184,7 @@ void Bullet::Show1(SDL_Renderer* screen)
 {
     rect_.x = x_pos - map_x;
     rect_.y = y_pos - map_y;
-    //std::cout<<rect_.x<<" "<<rect_.y<<'\n';
-   // std::cout<<rect_.x<<" "<<rect_.y<<'\n';
+
     SDL_Rect renderQuad = {rect_.x, rect_.y, rect_.w, rect_.h};
 
     SDL_RenderCopy(screen, p_object_, NULL, &renderQuad);

@@ -29,7 +29,7 @@ public :
     void MakeBullet(Map& map_data,SDL_Renderer* screen);
     void Set_amo_list(std::vector<Bullet*> p_bullet_list_) {p_bullet_list=p_bullet_list_;}
     void Reset_amo_list() {p_bullet_list=p_bullet_du_phong;}
-   // void DoPlay()
+
 private:
     float x_pos;
     float y_pos;

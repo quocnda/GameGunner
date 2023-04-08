@@ -21,16 +21,18 @@ BaseObject Lose_even;
 BaseObject back_menu;
 BaseObject play_;
 BaseObject pause_;
+BaseObject introduction_;
 
 TextObject menu[3];
 
-TextObject introduction_;
 
 MainObject main_obj;
 GameMap game_map;
 Mix_Music* game_sound_total=NULL;
-Mix_Chunk* game_sound_rasengan=NULL;
-Mix_Music* win_game=NULL;
+Mix_Chunk* win_game=NULL;
+Mix_Chunk* lose_game=NULL;
+Mix_Chunk* mouse_click=NULL;
+
 
 TTF_Font* font_time=NULL;
 TTF_Font* font_game_menu=NULL;
@@ -64,7 +66,6 @@ bool init() {
 					succes = false;
 				}
 
-				 //Initialize SDL_mixer
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
 				{
 					printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
@@ -75,12 +76,13 @@ bool init() {
 bool loadmedia() {
    gBackground.LoadImg("nen_den.jpg",gScreen);
    game_sound_total=Mix_LoadMUS("sound/y2mate_music.mp3");
-   game_sound_rasengan=Mix_LoadWAV("sound/Rasengan.wav");
-   win_game=Mix_LoadMUS("sound/win_sound.mp3");
+   win_game=Mix_LoadWAV("sound/win_sound.wav");
    if(win_game==NULL)
    {
        std::cout<<"loi load wingame"<<'\n';
    }
+   lose_game=Mix_LoadWAV("sound/lose_sound.wav");
+   mouse_click=Mix_LoadWAV("sound/mouse_click.wav");
   play_.LoadImg("image/play.jpg",gScreen);
 
    pause_.LoadImg("image/pause.jpg",gScreen);
@@ -90,15 +92,13 @@ bool loadmedia() {
    {
        std::cout<<"game soung =null"<<'\n';
    }
-   //Menu.LoadImg("menu.png",gScreen);
    return game_sound_total!=NULL;
 }
 void close() {
     Mix_FreeMusic(game_sound_total);
     game_sound_total=NULL;
-    Mix_FreeChunk(game_sound_rasengan);
-    game_sound_rasengan=NULL;
-    Mix_FreeMusic(win_game);
+
+    Mix_FreeChunk(win_game);
     win_game=NULL;
 
    SDL_DestroyRenderer(gScreen);
@@ -171,11 +171,10 @@ loadmedia();
                     }
                 }
                 if (gevent.type == SDL_MOUSEBUTTONDOWN) {
-                        std::cout<<"da vao day"<<'\n';
                     for (int i = 0; i < 3; i++) {
                         if (check_mouse(xm, ym, menu_pos[i]) && gevent.button.button == SDL_BUTTON_LEFT) {
+                            Mix_PlayChannel(-1,mouse_click,0);
                             quit1 = i + 1;
-                            std::cout<<quit1<<'\n';
                         }
                     }
                 }
@@ -191,6 +190,8 @@ loadmedia();
 
     if(quit1==1)
     {
+        bool time_win_game=false;
+        Uint32 time_win_game_;
         bool mouse_event=false;
         int pause=0;
         int play_ing=1;
@@ -215,7 +216,7 @@ loadmedia();
 
             bool is_win=false;
             Mix_PlayMusic(game_sound_total,4);
-            //Mix_VolumeMusic(50);
+
 
 
 
@@ -225,6 +226,9 @@ loadmedia();
 
             Win_even.LoadImg("image/you_win.png",gScreen);
             Win_even.SetRect(100,100);
+            Lose_even.LoadImg("image/you_lose.png",gScreen);
+            Lose_even.SetRect(100,100);
+
 
             dan.LoadImg("image/laser_.png",gScreen);
             rasengan.LoadImg("image/sphere_.png",gScreen);
@@ -261,10 +265,7 @@ loadmedia();
                 std::vector<Bullet*> p_bullet_boss;
             for(int i=0;i<16;i++) {
                 Bullet* p_bullet_boss_=new Bullet();
-               bool check= p_bullet_boss_->LoadImg("image/Threat_bullet.png",gScreen);
-                if(!check) {
-                    std::cout<<"loi load bom"<<'\n';
-                }
+             p_bullet_boss_->LoadImg("image/Threat_bullet.png",gScreen);
                 p_bullet_boss_->set_pos(BOSS_POS_X,BOSS_POS_Y);
                 if(i<8) {p_bullet_boss_->set_pos(BOSS_POS_X,BOSS_POS_Y);}
                 else if(i>=8) {p_bullet_boss_->set_pos(BOSS_POS_X-10,BOSS_POS_Y+10);}
@@ -283,7 +284,6 @@ loadmedia();
 
             }
             p_boss_ob[j]->Set_amo_list(p_bullet_boss);
-            p_boss_ob[j]->Set_p_bullet_du_phong(p_bullet_boss);
             }
 
              std::vector<ThreatObject*> p_threat;
@@ -313,9 +313,8 @@ loadmedia();
 
 
             game_map.LoadMap("map.txt");
-
             game_map.LoadTiles(gScreen);
-         //  Map mapX=game_map.getMap();
+
 
 
            PlayPower play_power;
@@ -340,9 +339,6 @@ loadmedia();
             bool is_win_=false;
             while(!quit&&!is_win)
             {
-
-
-
                 if (pause == 0) {
                 play_.Render(gScreen);
             }
@@ -357,7 +353,7 @@ loadmedia();
                     if (gevent.type == SDL_MOUSEBUTTONDOWN) {
                            mouse_event=false;
                         if (gevent.button.button == SDL_BUTTON_LEFT && check_mouse(xm, ym, pause_.GetRect()) ) {
-                            std::cout<<"da vao day 1"<<'\n';
+
                             pause = 0;
                         }
                     }
@@ -374,9 +370,9 @@ loadmedia();
                             int xm = gevent.motion.x;
                     int ym = gevent.motion.y;
                         if (gevent.button.button == SDL_BUTTON_LEFT && check_mouse(xm, ym, play_.GetRect()) ) {
-                            std::cout<<"da vao day 2"<<'\n';
                             pause = 1;
                             mouse_event=true;
+
                             pause_.Render(gScreen);
                             SDL_RenderPresent(gScreen);
                         }
@@ -425,34 +421,30 @@ loadmedia();
                     p_threat[i]->DoPlayer(map_data);
                     p_threat[i]->Show(gScreen);
                     bool check=p_threat[i]->CheckToBullet(main_obj);
-                    if(check) {
-                            std::cout<<p_threat.size()<<'\n';
-                        num_threat--;
-                    }
+
                 }
         for(int i = 0; i < p_threat.size(); i++){
             if(!p_threat[i]->is_alive()){
-
-                    std::cout<<"da chet"<<'\n';
                  p_threat.erase(p_threat.begin() + i);
             }
         }
-        if(p_threat.size()<=20&&p_boss_ob.size()<=2) {
-            //std::cout<<"da win";
-            game_map.setGate(7,1);
+        if(p_threat.size()<=NUM_THREAT_DIE&&p_boss_ob.size()<=NUM_BOSS_DIE) {
+            game_map.setGate(1,7);
             if(main_obj.is_win_())
             {
                 p_threat.clear();
             p_boss_ob.clear();
-            if(Mix_PlayingMusic()==1)
-            {
+
                 Mix_HaltMusic();
-            Mix_PlayMusic(win_game,2);
+            Mix_PlayChannel(-1,win_game,2);
 
             Win_even.Render(gScreen);
+            SDL_RenderPresent(gScreen);
             is_win_=true;
+            while(is_win_)
+            {
+                SDL_RenderPresent(gScreen);
             }
-
             }
 
 
@@ -466,9 +458,9 @@ loadmedia();
                 play_power.Decrease();
                 play_power.Show(gScreen);
                 main_obj.set_alive(true);
-            std::cout<<"da hoi sinh"<<'\n';
+
             }
-            /*else if(num_die>=3)
+            else if(num_die>=4)
             {
                 for(int i=0;i<p_threat.size();i++)
                 {
@@ -480,22 +472,24 @@ loadmedia();
                 }
                 p_threat.clear();
                 p_boss_ob.clear();
-                quit=true;
-            }*/
+                Mix_HaltMusic();
+                Mix_PlayChannel(-1,lose_game,2);
+                while(1)
+                {
+                Lose_even.Render(gScreen);
+                SDL_RenderPresent(gScreen);
+                }
+            }
         }
-        if(main_obj.Get_blood_main()!=0)
+       if(main_obj.Get_blood_main()!=0)
         {
             num_die--;
             play_power.Increase();
             play_power.Show(gScreen);
             main_obj.Set_blood_main(0);
-        }
+       }
 
         if(play_ing==1) {play_.Render(gScreen);}
-
-
-
-
 
         cnt_dan=main_obj.get_sorasengan();
         cnt_rasengan=main_obj.get_soshuriken();
@@ -506,7 +500,7 @@ loadmedia();
           so_dan.LoadFromRenderText(font_time,gScreen);
           dan.Render(gScreen);
          so_dan.RenderText(gScreen,SCREEN_WIDTH*0.3+32,20);
-         //val_cnt_dan="";
+
          so_dan.Free();
          strDan="";
 
@@ -537,7 +531,7 @@ loadmedia();
          so_threat.LoadFromRenderText(font_time,gScreen);
          so_threat.RenderText(gScreen,SCREEN_WIDTH*0.6+32,20);
          so_threat.Free();
-        //std::cout<<main_obj.Get_blood_main()<<'\n';
+
                  SDL_Delay(3);
 
 
@@ -548,6 +542,10 @@ loadmedia();
                  break;
                  }
                  else{
+                        if(time_win_game)
+                        {
+
+                        }
                     str_val=std::to_string(val_time);
                     str_time+=str_val;
                     time_game.SetText(str_time);
@@ -568,9 +566,9 @@ loadmedia();
     }
     else if(quit1==3)
     {
-
-        Menu.SetRect(0,0);
-        Menu.Render(gScreen);
+        introduction_.LoadImg("image/introduction.png",gScreen);
+        introduction_.SetRect(0,0);
+        introduction_.Render(gScreen);
         back_menu.Render(gScreen);
         while(quit1==3)
         {
@@ -580,9 +578,9 @@ loadmedia();
                 int ym = gevent.motion.y;
                 if(gevent.type == SDL_MOUSEBUTTONDOWN)
                 {
-                    std::cout<<"da vao day"<<'\n';
                     if (check_mouse(xm, ym, back_menu.GetRect()) && gevent.button.button == SDL_BUTTON_LEFT) {
                             quit1 = 0;
+                            Mix_PlayChannel(-1,mouse_click,0);
                             goto label;
                             std::cout<<quit1<<'\n';
                         }
@@ -592,13 +590,4 @@ loadmedia();
           SDL_RenderPresent(gScreen);
         }
     }
-
-
-
-      //introduction_.xuat_char();
-
-
-
-
-
 }

@@ -8,11 +8,7 @@ ThreatObject::ThreatObject()
     y_pos = 448;
     frame_1=0;
     frame_=0;
-    //ghost_dir = rand() % 4 + 25;
 
-    //isAlive = true;
-    //isChange = false;
-    //timeChangeDir = 0;
     Threat_width=0;
     Threat_height=0;
     status_=0;
@@ -23,7 +19,7 @@ ThreatObject::ThreatObject()
 
 ThreatObject::~ThreatObject()
 {
-    //dtor
+
 }
 
 bool ThreatObject::LoadImg(std::string path,SDL_Renderer* screen)
@@ -56,18 +52,14 @@ void ThreatObject::Show(SDL_Renderer* screen)
 
       rect_.x=x_pos-map_x;
       rect_.y=y_pos-map_y;
-     /* std::cout<<"rect_.x "<<rect_.x<<" "<<"rect.y "<<rect_.y<<'\n';
-      std::cout<<"x_pos "<<x_pos<<" "<<"y_pos "<<y_pos<<'\n';
-      std::cout<<"map_x "<<map_x<<" "<<"map_y "<<map_y<<'\n';
-      */
+
       SDL_Rect *current_clip=NULL;
    if(Dir==1) {
-          //std::cout<<"frame_ "<<frame_<<'\n';
+
         current_clip=&clip_left[frame_];
 
     }
     else if (Dir==2) {
-            //std::cout<<"frame_1 "<<frame_1<<'\n';
            current_clip=&clip_right[frame_1];
 
     }
@@ -117,8 +109,6 @@ void ThreatObject::DoPlayer(Map& map_data)
         x_val=0;
     }
     CheckToMap(map_data);
-    //CheckToBullet(p);
-//    isChange = false;
 }
 
 void ThreatObject::CheckToMap(Map& map_data)
@@ -128,9 +118,9 @@ void ThreatObject::CheckToMap(Map& map_data)
     int x1 = 0, x2 = 0;
     int y1 = 0, y2 = 0;
 
-    //check horizontal
+
     int height_min = FRAME < TILE_SIZE ? FRAME : TILE_SIZE;
-    //o thu bao nhieu
+
     x1 = (x_pos + x_val) / TILE_SIZE;
     x2 = (x_pos + x_val + FRAME - 1) / TILE_SIZE;
 
@@ -138,7 +128,7 @@ void ThreatObject::CheckToMap(Map& map_data)
     y2 = (y_pos + height_min - 1) / TILE_SIZE;
 
     if(x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y){
-        if(x_val > 0)   //main object dang di chuyen ve ben phai
+        if(x_val > 0)
         {
             int val1 = map_data.tile[y1][x2];
             int val2 = map_data.tile[y2][x2];
@@ -150,7 +140,7 @@ void ThreatObject::CheckToMap(Map& map_data)
 
             }
         }
-        else if(x_val < 0)   //main object dang di chuyen ve ben phai
+        else if(x_val < 0)
         {
             int val1 = map_data.tile[y1][x1];
             int val2 = map_data.tile[y2][x1];
@@ -171,7 +161,7 @@ void ThreatObject::CheckToMap(Map& map_data)
     y2 = (y_pos + y_val + FRAME - 1) / TILE_SIZE;
 
     if(x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y){
-        if(y_val > 0)   //main object dang di chuyen ve xuong
+        if(y_val > 0)
         {
             int val1 = map_data.tile[y2][x1];
             int val2 = map_data.tile[y2][x2];
@@ -180,13 +170,9 @@ void ThreatObject::CheckToMap(Map& map_data)
                 y_pos-=(Threat_height+1);
                 y_val=0;
                 Dir=(rand()%4)+1;
-                /*if(!isChange){
-                    isChange = true;
-                    ghost_dir -= 2;
-                }*/
             }
         }
-        else if(y_val < 0)   //main object dang di chuyen ve ben phai
+        else if(y_val < 0)
         {
             int val1 = map_data.tile[y1][x1];
             int val2 = map_data.tile[y1][x2];
@@ -194,22 +180,10 @@ void ThreatObject::CheckToMap(Map& map_data)
                     y_pos=(y1+1)*TILE_SIZE;
                 y_val=0;
                 Dir=(rand()%4)+1;
-                /*if(!isChange){
-                    isChange = true;
-                    ghost_dir += 2;
-                }
-                */
+
             }
         }
     }
-    /*if(x_pos <= 0 || y_pos <= 0){
-        ghost_dir += 2;dw
-        isChange = true;
-    }
-    if(x_pos + FRAME > map_data.max_x || y_pos + FRAME > map_data.max_y){
-        ghost_dir -= 2;
-        isChange = true;
-    }*/
     x_pos += x_val;
     y_pos += y_val;
      if(x_pos<0) {
@@ -221,7 +195,7 @@ void ThreatObject::CheckToMap(Map& map_data)
         Dir=(rand()%4)+1;
 
     }
-    //if(isChange) timeChangeDir++;
+
 }
 
 bool ThreatObject::CheckToBullet(MainObject& p)
@@ -234,7 +208,6 @@ bool ThreatObject::CheckToBullet(MainObject& p)
     mainRect.h=mainRect.h/2;
     SDL_Rect subRect = p.GetRect();
     subRect.w=subRect.w/6;
-   // subRect.x+=4;
     subRect.h=subRect.h/5;
     if(checkCollision(mainRect, subRect))  {
     p.set_alive(false);
