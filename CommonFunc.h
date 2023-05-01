@@ -55,8 +55,8 @@ const int TILE_SIZE=64;
 
 #define TIME_ 500
 
-#define NUM_BOSS_DIE 5
-#define NUM_THREAT_DIE 25
+#define NUM_BOSS_DIE 0
+#define NUM_THREAT_DIE 0
 
 typedef struct Map
 {
