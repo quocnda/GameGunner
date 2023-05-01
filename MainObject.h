@@ -54,6 +54,15 @@ public:
    void set_is_move(bool t) {is_move=t;}
    bool is_win_() {return is_win;}
 
+   void set_x_pos(int x) {x_pos_=x;}
+   void set_y_pos(int y) {y_pos_=y;}
+
+   void set_x_val(int x) {x_val_=x;}
+   void set_y_val(int y) {y_val_=y;}
+
+   void set_input_type(int x) {input_type.down=0;input_type.up=0;input_type.left=0;input_type.right=0;}
+
+   void set_is_win(bool t ) {is_win=t;}
 
    int GetDir() {return Dir;}
 private:

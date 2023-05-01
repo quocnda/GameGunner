@@ -80,7 +80,7 @@ bool BossObject::CheckToBullet(MainObject& p)
      bool is_ban=false;
     std::vector<Bullet*> bullet = p.Getamo();
     SDL_Rect mainRect = this->rect_;
-    mainRect.w=mainRect.w/5-10;
+    mainRect.w=mainRect.w/24;
     mainRect.h=mainRect.h-2;
     SDL_Rect subRect = p.GetRect();
     subRect.w=subRect.w/6;

@@ -107,3 +107,107 @@
 
 1680542440 source:d:\c++\thuram\introduction.cpp
 
+1680921073 source:d:\c++\gamegunner\audio.cpp
+	"Audio.h"
+
+1680921073 d:\c++\gamegunner\audio.h
+	"CommonFunc.h"
+
+1682908069 d:\c++\gamegunner\commonfunc.h
+	<SDL_image.h>
+	<SDL.h>
+	<SDL_ttf.h>
+	<iostream>
+	<unistd.h>
+	<vector>
+	<ostream>
+	<cstdlib>
+	<stdlib.h>
+	<ctime>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1679123249 source:d:\c++\gamegunner\baseobject.cpp
+	"BaseObject.h"
+
+1679123235 d:\c++\gamegunner\baseobject.h
+	"CommonFunc.h"
+
+1682900565 source:d:\c++\gamegunner\bossobject.cpp
+	"BossObject.h"
+
+1682738113 d:\c++\gamegunner\bossobject.h
+	"BaseObject.h"
+	"CommonFunc.h"
+	"BulletObject.h"
+	"Map.h"
+	"MainObject.h"
+
+1680920486 d:\c++\gamegunner\bulletobject.h
+	"BaseObject.h"
+	"Map.h"
+
+1680919765 d:\c++\gamegunner\map.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1682905514 d:\c++\gamegunner\mainobject.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"BulletObject.h"
+	"Audio.h"
+
+1680920681 source:d:\c++\gamegunner\bulletobject.cpp
+	"BulletObject.h"
+
+1679731916 source:d:\c++\gamegunner\bulletthreat.cpp
+	"BulletThreat.h"
+
+1679731927 d:\c++\gamegunner\bulletthreat.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"Map.h"
+
+1679117669 source:d:\c++\gamegunner\commonfunc.cpp
+	"CommonFunc.h"
+
+1682905844 source:d:\c++\gamegunner\mainobject.cpp
+	"MainObject.h"
+
+1680919765 source:d:\c++\gamegunner\map.cpp
+	"Map.h"
+
+1682906883 source:d:\c++\gamegunner\playpower.cpp
+	"PlayPower.h"
+
+1680197952 d:\c++\gamegunner\playpower.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1680920681 source:d:\c++\gamegunner\textobject.cpp
+	"TextObject.h"
+
+1680920681 d:\c++\gamegunner\textobject.h
+	"CommonFunc.h"
+	"BaseObject.h"
+
+1680920464 source:d:\c++\gamegunner\threatobject.cpp
+	"ThreatObject.h"
+
+1680541489 d:\c++\gamegunner\threatobject.h
+	"CommonFunc.h"
+	"BaseObject.h"
+	"MainObject.h"
+	"BulletObject.h"
+
+1682908045 source:d:\c++\gamegunner\main.cpp
+	"CommonFunc.h"
+	"BaseObject.h"
+	"MainObject.h"
+	"Map.h"
+	"ThreatObject.h"
+	"BossObject.h"
+	"TextObject.h"
+	"PlayPower.h"
+	"Audio.h"
+

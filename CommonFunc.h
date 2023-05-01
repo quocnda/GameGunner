@@ -35,7 +35,7 @@ typedef struct Input{
 };
 
 const int TILE_SIZE=64;
-#define NUM_THREAT 25
+
 #define MAP_X 42
 #define MAP_Y 29
 
@@ -48,8 +48,15 @@ const int TILE_SIZE=64;
 #define BOSS_POS_X_2 1728
 #define BOSS_POS_Y_2 1536
 
-#define NUM_BOSS_DIE 0
-#define NUM_THREAT_DIE 0
+#define NUM_RASENGAN 20
+#define NUM_SHURIKEN 20
+
+#define GAME_MAX_LEVEL 1
+
+#define TIME_ 500
+
+#define NUM_BOSS_DIE 5
+#define NUM_THREAT_DIE 25
 
 typedef struct Map
 {

@@ -10,6 +10,7 @@ PlayPower::~PlayPower()
 }
 void PlayPower::Init(SDL_Renderer* screen)
 {
+    std::cout<<"da vao day"<<'\n';
  LoadImg("image/Playpower.png",screen);
  number=3;
  if(pos_list.size()>0) {
